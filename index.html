@@ -13,12 +13,14 @@
 <style>
 :root{
   --bg:#F4F4F5; --surface:#FFFFFF; --surface-2:#F4F4F5; --line:#E7E7EA; --line-2:#EFEFF1;
-  --ink:#232326; --ink-2:#3F3F46; --muted:#6F6F78; --faint:#A1A1AA;
+  --ink:#232326; --ink-2:#3F3F46; --muted:#73737C; --faint:#A1A1AA;
   --orange:#F7751E; --orange-ink:#FFFFFF; --orange-soft:#FEEBDD; --orange-deep:#C4560C;
   --graphite:#262628; --graphite-ink:#FFFFFF;
   --ok:#1F9D55; --ok-soft:#E3F5EA; --no:#D23C2F; --no-soft:#FCE6E3;
   --warn:#B7700A; --warn-soft:#FDF1DC; --info:#1C8BD8; --info-soft:#E1F0FB;
-  --shadow:0 12px 24px -12px rgba(0,0,0,.12); --r:14px;
+  --track:#E9E9EC;
+  --shadow:0 20px 27px 0 rgba(0,0,0,.05); --shadow-sm:0 4px 10px -2px rgba(0,0,0,.08);
+  --r:16px; --btn:#262628;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
@@ -28,7 +30,7 @@
     --orange-soft:#3A2414; --orange-deep:#FFA266; --graphite:#2A2A2E;
     --ok:#4ACB7F; --ok-soft:#15301F; --no:#F2796D; --no-soft:#3A1A17;
     --warn:#F0B550; --warn-soft:#342612; --info:#5CB6F2; --info-soft:#132C3E;
-    --shadow:0 12px 24px -12px rgba(0,0,0,.5);
+    --track:#2E2E33; --btn:#F7751E; --shadow:0 20px 27px 0 rgba(0,0,0,.35); --shadow-sm:0 4px 10px -2px rgba(0,0,0,.4);
   }
 }
 :root[data-theme="dark"]{
@@ -38,171 +40,364 @@
   --orange-soft:#3A2414; --orange-deep:#FFA266; --graphite:#2A2A2E;
   --ok:#4ACB7F; --ok-soft:#15301F; --no:#F2796D; --no-soft:#3A1A17;
   --warn:#F0B550; --warn-soft:#342612; --info:#5CB6F2; --info-soft:#132C3E;
-  --shadow:0 12px 24px -12px rgba(0,0,0,.5);
+  --track:#2E2E33; --btn:#F7751E; --shadow:0 20px 27px 0 rgba(0,0,0,.35); --shadow-sm:0 4px 10px -2px rgba(0,0,0,.4);
 }
 *{box-sizing:border-box}
 html,body{margin:0}
 body{background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
 h1,h2,h3,h4{margin:0;text-wrap:balance}
+p{margin:0}
 button,input,select{font:inherit;color:inherit}
 a{color:var(--orange-deep)}
 svg.i{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
-.shell{display:grid;grid-template-columns:224px minmax(0,1fr);min-height:100vh}
-.side{position:sticky;top:0;height:100vh;padding:20px 14px;display:flex;flex-direction:column;gap:4px;border-right:1px solid var(--line)}
-.brand{display:flex;align-items:center;gap:10px;padding:4px 10px 16px;font-weight:600}
-.logo{width:28px;height:28px;border-radius:8px;background:var(--graphite);color:var(--graphite-ink);display:grid;place-items:center}
-.nav a{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;color:var(--ink-2);text-decoration:none;font-weight:500}
-.nav a:hover{background:var(--surface)}
-.nav a.on{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:var(--shadow)}
-.nav a.on svg{color:var(--orange)}
+:focus-visible{outline:2px solid var(--orange);outline-offset:2px}
+
+/* shell */
+.shell{display:grid;grid-template-columns:250px minmax(0,1fr);min-height:100vh}
+.side{position:sticky;top:0;height:100vh;padding:24px 16px;display:flex;flex-direction:column;gap:4px}
+.brand{display:flex;align-items:center;gap:10px;padding:8px 12px 20px;font-weight:600;font-size:14.5px;border-bottom:1px solid var(--line);margin-bottom:14px;line-height:1.25}
+.logo{width:32px;height:32px;border-radius:9px;background:var(--graphite);color:var(--graphite-ink);display:grid;place-items:center;flex-shrink:0}
+.nav{display:flex;flex-direction:column;gap:4px}
+.nav a{display:flex;align-items:center;gap:12px;padding:8px 12px;border-radius:12px;color:var(--ink-2);text-decoration:none;font-size:13.5px;font-weight:500}
+.nav a .ic{width:32px;height:32px;border-radius:9px;background:var(--surface);box-shadow:var(--shadow-sm);display:grid;place-items:center;color:var(--ink)}
+.nav a:hover{color:var(--ink)}
+.nav a.on{background:var(--surface);box-shadow:var(--shadow);color:var(--ink);font-weight:600}
+.nav a.on .ic{background:var(--orange);color:var(--orange-ink);box-shadow:none}
 .nav a .n{margin-left:auto;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
-.nav a:focus-visible,.tabs a:focus-visible,.chip:focus-visible,button:focus-visible{outline:2px solid var(--orange);outline-offset:2px}
-.side-foot{margin-top:auto;padding:12px 10px 0;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:6px}
-.side-foot a{display:flex;align-items:center;gap:8px;color:var(--muted);text-decoration:none;font-size:12.5px}
-.side-foot a:hover{color:var(--ink)}
-.side-foot svg.i{width:13px;height:13px}
-.main{padding:22px 28px 56px;min-width:0;max-width:1180px}
-.crumb{font-size:12.5px;color:var(--muted);margin-bottom:2px}
-.crumb a{color:var(--muted)}
-.vh{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:18px}
-.vh h1{font-size:20px;font-weight:650}
-.sub{color:var(--muted);font-size:13px}
-.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start}
-.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;min-width:0}
-.card h2{font-size:14px;font-weight:650;display:flex;align-items:center;gap:8px;margin-bottom:10px}
-.card h2 .c{color:var(--muted);font-weight:500}
-.empty{color:var(--muted);font-size:13px}
-.stats{display:flex;flex-wrap:wrap;gap:8px 22px;margin-bottom:16px;color:var(--muted);font-size:13px}
-.stats b{color:var(--ink);font-size:18px;font-weight:650;margin-right:4px;font-variant-numeric:tabular-nums}
-.li{display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--line-2);text-decoration:none;color:inherit}
-.li:first-of-type{border-top:0}
-.li .w{min-width:0;flex:1}
-.li .t{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.li .m{color:var(--muted);font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.li .r{font-size:12.5px;color:var(--muted);white-space:nowrap;text-align:right}
-a.li:hover .t{color:var(--orange-deep)}
-.pill{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;padding:2px 9px;border-radius:999px;white-space:nowrap;background:var(--surface-2);color:var(--ink-2)}
-.pill.info{background:var(--info-soft);color:var(--info)} .pill.ok{background:var(--ok-soft);color:var(--ok)}
-.pill.no{background:var(--no-soft);color:var(--no)} .pill.warn{background:var(--warn-soft);color:var(--warn)}
-.tag{display:inline-block;font-size:12px;padding:2px 8px;border-radius:6px;border:1px solid var(--line);color:var(--ink-2);margin:0 4px 4px 0}
-.late{color:var(--no);font-weight:600}
-.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
-.search{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:7px 11px;flex:1 1 280px;color:var(--muted)}
-.search input{border:0;outline:0;background:transparent;width:100%;color:var(--ink)}
+.nav-label{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);padding:18px 12px 4px}
+.nav.sys a{font-size:13px;color:var(--muted)}
+.nav.sys a .ic{width:28px;height:28px;box-shadow:none;background:transparent;color:var(--muted)}
+.nav.sys a.on .ic{background:var(--orange);color:#fff}
+/* profile module */
+.me{margin-top:auto;background:var(--surface);border-radius:14px;box-shadow:var(--shadow);padding:14px}
+.me-h{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.me-av{width:34px;height:34px;border-radius:50%;background:var(--graphite);color:#fff;display:grid;place-items:center;font-weight:700;font-size:12px;flex-shrink:0}
+.me-h b{display:block;font-size:13.5px;line-height:1.2}
+.me-h div>span{display:block;font-size:12px;color:var(--muted);line-height:1.3}
+.me-l{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.me-l a{display:flex;align-items:center;justify-content:center;gap:6px;padding:8px 6px;border-radius:10px;background:var(--surface-2);color:var(--ink);text-decoration:none;font-size:12.5px;font-weight:600}
+.me-l a svg{width:14px;height:14px;color:var(--orange)}
+.me-l a:hover{background:var(--orange-soft);color:var(--orange-deep)}
+
+.main{padding:18px 28px 56px;min-width:0;width:100%;max-width:1560px;margin:0 auto}
+.topbar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 20px;margin-bottom:22px}
+.crumb{font-size:13px;color:var(--muted)}
+.crumb a{color:var(--muted);text-decoration:none}
+.crumb a:hover{color:var(--ink)}
+.topbar h1{font-size:15.5px;font-weight:600;margin-top:2px}
+.tools{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.search{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 12px;width:340px;max-width:100%;color:var(--muted)}
+.search input{border:0;outline:0;background:transparent;width:100%;min-width:0;color:var(--ink)}
 .search:focus-within{border-color:var(--orange)}
-select{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:7px 10px;max-width:100%}
-.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
-.chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:4px 12px;font-size:12.5px;cursor:pointer;color:var(--ink-2)}
-.chip.on{background:var(--graphite);color:var(--graphite-ink);border-color:var(--graphite)}
-.chip .n{opacity:.7;margin-left:4px}
-.tbl{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
-.tr{display:grid;grid-template-columns:minmax(0,2.4fr) 1.3fr 1fr .9fr .9fr 1fr;gap:12px;align-items:center;padding:10px 16px;border-top:1px solid var(--line-2);color:inherit;text-decoration:none}
-.tr.h{border-top:0;font-size:11.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);background:var(--surface-2)}
-a.tr:hover{background:var(--surface-2)}
-.tr .t{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.tr .m{color:var(--muted);font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.tr .hit{font-size:11.5px;color:var(--orange-deep)}
-.more{display:block;width:100%;padding:10px;border:0;border-top:1px solid var(--line);background:var(--surface);cursor:pointer;color:var(--orange-deep);font-weight:600}
-.dh{display:flex;gap:14px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}
-.dh h1{font-size:22px}
-.dh .role{color:var(--ink-2);font-size:15px;margin-top:2px}
-.dh .pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:16px 0}
-.fact{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:9px 12px}
-.fact span{display:block;font-size:11.5px;color:var(--muted)}
-.fact b{font-weight:600;font-size:13.5px}
-.planned{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--orange);background:var(--orange-soft);border-radius:12px;padding:10px 14px;margin-bottom:14px}
-.tabs{display:flex;gap:2px;border-bottom:1px solid var(--line);margin:4px 0 16px;overflow-x:auto}
-.tabs a{padding:9px 13px;text-decoration:none;color:var(--muted);font-weight:500;border-bottom:2px solid transparent;white-space:nowrap}
-.tabs a.on{color:var(--ink);border-color:var(--orange);font-weight:600}
-.sec{margin-bottom:16px}
-.sec h3{font-size:13px;font-weight:650;margin-bottom:8px;color:var(--ink)}
-.kv{display:grid;grid-template-columns:minmax(120px,170px) 1fr;gap:6px 16px;margin:0}
-.kv dt{color:var(--muted)} .kv dd{margin:0;overflow-wrap:anywhere}
-.txt{white-space:pre-wrap;overflow-wrap:anywhere;margin:0}
-.qa{display:flex;flex-direction:column;gap:12px}
-.qa .q{font-size:12.5px;color:var(--muted)}
-.qa .a{white-space:pre-wrap;overflow-wrap:anywhere}
-.qa .nt{font-size:12.5px;color:var(--warn);margin-top:3px}
-.grp{font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
-.corr{font-size:11.5px;color:var(--warn);font-weight:600;margin-left:6px}
-details.ev{border:1px solid var(--line);border-radius:10px;margin-top:8px}
-details.ev>summary{cursor:pointer;padding:8px 12px;font-size:12.5px;font-weight:600;color:var(--orange-deep);list-style:none}
-details.ev>summary::-webkit-details-marker{display:none}
-details.ev>div{padding:4px 12px 12px;font-size:13px;color:var(--ink-2)}
-.tl{list-style:none;margin:0;padding:0 0 0 14px;border-left:2px solid var(--line)}
-.tl li{position:relative;padding:0 0 16px 12px}
-.tl li:before{content:"";position:absolute;left:-21px;top:5px;width:10px;height:10px;border-radius:50%;background:var(--surface);border:2px solid var(--faint)}
-.tl li.p:before{border-color:var(--orange);background:var(--orange)}
-.tl li.ms:before{border-color:var(--ink-2)}
-.tl .d{font-size:12px;color:var(--muted)} .tl .l{font-weight:600}
-.tl .s{margin-top:2px;overflow-wrap:anywhere;color:var(--ink-2);font-size:13px}
-.v{white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px;border-left:3px solid var(--line);padding:6px 10px;margin-top:6px;color:var(--ink-2)}
-.ai{border:1px dashed var(--orange);border-radius:12px;padding:12px 14px;margin-bottom:16px}
-.ai code{background:var(--surface-2);padding:1px 6px;border-radius:6px;font-size:12.5px}
-.btn{border:1px solid var(--line);background:var(--surface);border-radius:9px;padding:5px 11px;cursor:pointer;font-size:12.5px;font-weight:600}
-.post{font-size:14px;line-height:1.6;color:var(--ink-2)}
-.post .src{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);background:var(--surface-2);border-radius:6px;padding:2px 8px;margin-bottom:10px}
-.post .pt{font-size:17px;font-weight:700;color:var(--ink);margin:0 0 6px}
-.post h5{font-size:13px;font-weight:700;color:var(--ink);margin:16px 0 6px}
-.post p{margin:0 0 8px;max-width:72ch} .post ul{margin:0 0 8px;padding-left:20px}
-.post .note{margin:12px 0 0;padding:9px 12px;border-radius:10px;background:var(--warn-soft);font-size:12.5px}
-.audit{font-size:12.5px;color:var(--ink-2)}
-.audit .row{border-top:1px solid var(--line-2);padding:8px 0}
-.audit .id{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;color:var(--muted)}
+.search kbd{font:inherit;font-size:11px;border:1px solid var(--line);border-radius:5px;padding:0 5px;color:var(--faint)}
+.stamp{font-size:12.5px;font-weight:600;color:var(--orange-deep);border:1px solid var(--orange);border-radius:10px;padding:7px 14px;white-space:nowrap}
+.mbar,.bnav{display:none}
+
+/* building blocks */
+.card{background:var(--surface);border-radius:var(--r);box-shadow:var(--shadow);min-width:0}
+.pad{padding:22px 24px}
+.ch{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:22px 24px 14px}
+.ch h2,.card h2{font-size:16px;font-weight:600}
+.ch .sub,.sub{color:var(--muted);font-size:13px;margin-top:3px}
+.sub b{color:var(--ink-2)}
+.lab{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.empty{color:var(--muted);font-size:13px}
 .fine{color:var(--faint);font-size:12px}
-.bar{display:grid;grid-template-columns:150px 1fr 52px;gap:10px;align-items:center;margin:6px 0;font-size:13px}
-.bar .tk{height:8px;background:var(--surface-2);border-radius:99px;overflow:hidden}
-.bar .tk i{display:block;height:100%;background:var(--orange)}
-.mbar{display:none}
-@media (max-width:860px){
-  .shell{grid-template-columns:minmax(0,1fr)}
-  .side{position:static;height:auto;flex-direction:row;align-items:center;flex-wrap:wrap;padding:10px 12px;gap:6px;background:var(--bg);border-right:0;border-bottom:1px solid var(--line)}
-  .brand{padding:0 6px 0 0}
-  .brand span.t{display:none}
-  .nav{display:flex;gap:2px;overflow-x:auto;min-width:0;order:3;flex:1 1 100%;justify-content:space-between}
-  .nav a{padding:7px 8px;font-size:13px;gap:6px}
-  .nav a svg{display:none}
-  .nav a .n{display:none}
-  .side-foot{margin:0 0 0 auto;padding:0 4px;border:0;flex-direction:row;gap:14px}
-  .main{padding:16px 16px 48px}
-  .grid2{grid-template-columns:1fr}
-  .tr.h{display:none}
-  .tr{grid-template-columns:1fr auto;gap:2px 10px;padding:11px 14px}
-  .tr>:nth-child(n+3){grid-column:1/-1;font-size:12.5px;color:var(--muted)}
-  .tr>:nth-child(n+4){display:none}
-  .kv{grid-template-columns:1fr;gap:0}.kv dd{margin-bottom:8px}
-  .bar{grid-template-columns:110px 1fr 40px}
+.link{font-size:12.5px;font-weight:600;color:var(--orange-deep);text-decoration:none;white-space:nowrap}
+.link:hover{text-decoration:underline}
+.stack{display:flex;flex-direction:column;gap:24px;min-width:0}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:3px 10px;font-size:11.5px;font-weight:600;white-space:nowrap;background:var(--surface-2);color:var(--muted)}
+.pill::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.pill.ok{background:var(--ok-soft);color:var(--ok)} .pill.no{background:var(--no-soft);color:var(--no)}
+.pill.warn{background:var(--warn-soft);color:var(--warn)} .pill.info{background:var(--info-soft);color:var(--info)}
+.pill.hot{background:var(--orange-soft);color:var(--orange-deep)}
+.tag{display:inline-flex;align-items:center;border-radius:8px;padding:3px 9px;font-size:12px;font-weight:500;color:var(--ink-2);background:var(--surface-2);margin:0 6px 6px 0}
+.av{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;font-weight:700;font-size:13px;color:#fff;flex-shrink:0}
+.co{display:flex;align-items:center;gap:12px;min-width:0}
+.co-n{font-weight:600;font-size:13.5px;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.co-r{color:var(--muted);font-size:12.5px;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.co>div{min-width:0}
+.late{color:var(--no);font-weight:600}
+.btn{display:inline-flex;align-items:center;gap:6px;border:0;border-radius:10px;padding:9px 16px;font-weight:600;font-size:12.5px;cursor:pointer;text-decoration:none;white-space:nowrap;background:var(--surface-2);color:var(--ink)}
+.btn.dark{background:var(--btn);color:var(--graphite-ink);box-shadow:var(--shadow-sm)}
+.btn.line{background:var(--surface);border:1px solid var(--line)}
+.btn svg{width:14px;height:14px}
+.blk{background:var(--surface-2);border-radius:14px;padding:16px 18px}
+.blk+.blk{margin-top:14px}
+.blk>.lab{display:block;margin-bottom:10px}
+.kv{display:grid;grid-template-columns:minmax(110px,160px) 1fr;gap:9px 16px;margin:0;font-size:13.5px}
+.kv dt{color:var(--muted)} .kv dd{margin:0;overflow-wrap:anywhere}
+.kv dd b{font-weight:600}
+.prose{max-width:74ch;overflow-wrap:anywhere}
+.prose p+p{margin-top:8px}
+ul.pts{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px}
+.q{border-left:3px solid var(--orange);background:var(--surface);border-radius:0 10px 10px 0;padding:10px 14px;white-space:pre-wrap;overflow-wrap:anywhere;font-size:13.5px;color:var(--ink-2)}
+.corr{display:inline-block;font-size:11px;font-weight:600;color:var(--warn);background:var(--warn-soft);border-radius:6px;padding:0 6px;margin-left:6px;vertical-align:1px}
+details.clamp>summary{list-style:none;cursor:pointer}
+details.clamp>summary::-webkit-details-marker{display:none}
+details.clamp .rd{color:var(--orange-deep);font-weight:600;font-size:12.5px;white-space:nowrap}
+details.clamp[open]>summary{display:none}
+details.fold{border-radius:12px;background:var(--surface-2)}
+details.fold+details.fold{margin-top:10px}
+details.fold>summary{cursor:pointer;padding:12px 16px;font-weight:600;font-size:13px;list-style:none;display:flex;justify-content:space-between;gap:10px}
+details.fold>summary::-webkit-details-marker{display:none}
+details.fold>summary::after{content:"Mostrar";font-size:12px;color:var(--orange-deep)}
+details.fold[open]>summary::after{content:"Ocultar"}
+details.fold>div{padding:0 16px 14px}
+
+/* Hoje */
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;margin-bottom:24px}
+.kpi{border-radius:var(--r);padding:18px 20px;background:var(--graphite);color:var(--graphite-ink);box-shadow:var(--shadow);display:flex;align-items:center;gap:16px;text-decoration:none;min-height:96px}
+.kpi.hot{background:var(--orange);color:var(--orange-ink)}
+.kpi .ico{width:44px;height:44px;border-radius:50%;background:#fff;color:#232326;display:grid;place-items:center;flex-shrink:0}
+.kpi .ico svg{width:19px;height:19px}
+.kpi .n{font-size:24px;font-weight:700;line-height:1.1;font-variant-numeric:tabular-nums}
+.kpi .l{font-size:13.5px;opacity:.92}
+.kpi .h{font-size:12px;font-weight:600;opacity:.8;margin-left:auto;text-align:right;align-self:flex-end}
+.dash{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(320px,1fr);gap:24px;align-items:start}
+.rows .r{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 14px;align-items:center;padding:12px 24px;border-top:1px solid var(--line-2);text-decoration:none;color:inherit}
+.rows .r:hover{background:var(--surface-2)}
+.rows .r:last-child{border-radius:0 0 var(--r) var(--r)}
+.rows .r .rt{text-align:right;font-size:12.5px;color:var(--muted);white-space:nowrap}
+.rows .r .rt .pill{margin-bottom:3px}
+.mini .r{padding:10px 24px}
+.agenda .it{display:flex;gap:12px;align-items:center;padding:10px 24px;border-top:1px solid var(--line-2);text-decoration:none;color:inherit}
+.agenda .it:hover{background:var(--surface-2)}
+.date{width:44px;flex-shrink:0;text-align:center;border-radius:10px;background:var(--surface-2);padding:4px 0;line-height:1.1}
+.date b{display:block;font-size:16px}
+.date span{font-size:10.5px;text-transform:uppercase;color:var(--muted);font-weight:600}
+.date.hot{background:var(--orange-soft);color:var(--orange-deep)}
+.date.hot span{color:var(--orange-deep)}
+.bars{display:flex;flex-direction:column;gap:14px}
+.bar-t{display:flex;justify-content:space-between;gap:10px;font-size:13.5px}
+.bar-t span:last-child{color:var(--muted);font-variant-numeric:tabular-nums}
+.track{height:4px;background:var(--track);border-radius:4px;margin-top:6px;overflow:hidden}
+.track i{display:block;height:100%;background:var(--orange);border-radius:4px}
+.note{font-size:12.5px;color:var(--muted);margin-top:16px}
+
+/* list */
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 12px;font-size:12.5px;cursor:pointer;color:var(--ink-2)}
+.chip.on{background:var(--orange);border-color:var(--orange);color:#fff}
+.chip .c{opacity:.75;margin-left:4px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;padding:0 24px 16px;align-items:center}
+.filters select{background:var(--surface-2);border:1px solid transparent;border-radius:9px;padding:6px 10px;font-size:13px;max-width:100%;cursor:pointer}
+.filters select.set{background:var(--orange-soft);color:var(--orange-deep);font-weight:600}
+.filters .sp{flex:1}
+.filters .clear{border:0;background:none;color:var(--orange-deep);font-weight:600;font-size:12.5px;cursor:pointer}
+.thead,.trow{display:grid;grid-template-columns:minmax(0,2.4fr) minmax(0,1.15fr) minmax(0,1fr) 84px 84px minmax(0,1.1fr);gap:14px;align-items:center;padding:0 24px}
+.thead{font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--faint);padding-block:10px;border-top:1px solid var(--line-2);border-bottom:1px solid var(--line-2)}
+.trow{padding-block:13px;border-bottom:1px solid var(--line-2);text-decoration:none;color:inherit}
+.trow:hover{background:var(--surface-2)}
+.trow:last-child{border-bottom:0}
+.cell{font-size:13px;color:var(--ink-2);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cell small{display:block;color:var(--muted);font-size:12px}
+.cell.dim{color:var(--faint)}
+.hit{display:inline-block;margin-top:3px;font-size:11.5px;font-weight:600;color:var(--orange-deep);background:var(--orange-soft);border-radius:6px;padding:0 6px}
+.more{display:block;width:100%;padding:12px;border:0;border-top:1px solid var(--line-2);background:transparent;cursor:pointer;color:var(--orange-deep);font-weight:600;border-radius:0 0 var(--r) var(--r)}
+.none{padding:36px 24px;text-align:center;color:var(--muted)}
+
+/* detail */
+.dhead{display:flex;gap:18px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;padding:22px 24px;margin-bottom:24px}
+.dhead .av{width:52px;height:52px;border-radius:14px;font-size:17px}
+.dhead h2{font-size:21px;font-weight:700;line-height:1.2}
+.dhead .role{color:var(--ink-2);font-size:14.5px;margin-top:2px}
+.dhead .pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.dhead .acts{display:flex;gap:8px;flex-wrap:wrap}
+.dgrid{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:24px;align-items:start}
+.tabs{display:flex;gap:4px;padding:0 16px;border-bottom:1px solid var(--line-2);overflow-x:auto;scrollbar-width:none}
+.tabs a{padding:15px 10px 13px;text-decoration:none;color:var(--muted);font-weight:500;font-size:13.5px;border-bottom:2px solid transparent;white-space:nowrap}
+.tabs a:hover{color:var(--ink)}
+.tabs a.on{color:var(--ink);border-color:var(--orange);font-weight:600}
+.tabs a.tech{margin-left:auto;font-size:12.5px}
+.tbody{padding:22px 24px 26px}
+.sec+.sec{margin-top:24px}
+.sec>h3{font-size:14px;font-weight:600;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.state{display:flex;gap:14px;align-items:flex-start;border-radius:14px;padding:16px 18px;background:var(--surface-2)}
+.state .ico{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--surface);color:var(--ink);flex-shrink:0}
+.state b{font-size:15px}
+.state{margin-bottom:24px}
+.state.plan{background:var(--orange-soft)}
+.state.plan .ico{background:var(--orange);color:#fff}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.facts>div{background:var(--surface-2);border-radius:12px;padding:10px 14px}
+.facts span{display:block;font-size:12px;color:var(--muted)}
+.facts b{font-weight:600;font-size:13.5px}
+.facts small{display:block;color:var(--muted);font-size:12px;font-weight:400}
+.rail{position:sticky;top:18px}
+.rail .card+.card{margin-top:24px}
+details.rnote{margin-top:6px;font-size:12.5px;color:var(--muted)}
+details.rnote>summary{cursor:pointer;list-style:none;display:inline-flex;align-items:center;gap:4px;color:var(--faint);font-weight:500}
+details.rnote>summary::-webkit-details-marker{display:none}
+details.rnote>summary::before{content:"+";font-weight:700}
+details.rnote[open]>summary::before{content:"−"}
+details.rnote>div{margin-top:4px;padding:8px 10px;border-radius:8px;background:var(--surface-2);overflow-wrap:anywhere}
+.rail .rk{display:grid;grid-template-columns:auto 1fr;gap:10px 14px;padding:0 24px 20px;font-size:13px;align-items:baseline}
+.rail .rk dt{color:var(--muted)} .rail .rk dd{margin:0;text-align:right;font-weight:500;overflow-wrap:anywhere}
+.rail .rk dd small{display:block;color:var(--muted);font-weight:400}
+.rail .rb{padding:0 24px 20px;font-size:13px}
+/* timeline */
+.tl{list-style:none;margin:0;padding:0}
+.tl li{display:grid;grid-template-columns:28px 1fr;gap:12px;position:relative;padding-bottom:18px}
+.tl li:not(:last-child)::after{content:"";position:absolute;left:13px;top:30px;bottom:0;width:2px;background:var(--line)}
+.tl .dot{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--surface-2);color:var(--muted);position:relative;z-index:1}
+.tl .dot svg{width:14px;height:14px}
+.tl li.p .dot{background:var(--orange-soft);color:var(--orange-deep)}
+.tl li.big .dot{background:var(--orange);color:#fff}
+.tl .d{font-size:12px;color:var(--muted)}
+.tl .l{font-weight:600;font-size:13.5px}
+.tl .x{margin-top:3px;font-size:13.5px;color:var(--ink-2);overflow-wrap:anywhere}
+.tl .q{margin-top:8px}
+.tl .rec{margin-top:6px;font-size:12.5px;color:var(--muted)}
+.tl.compact li{padding-bottom:12px}
+/* answers */
+.qa{display:flex;flex-direction:column;gap:10px}
+.qa>div{background:var(--surface);border-radius:12px;padding:12px 14px}
+.qa .qq{font-size:12.5px;color:var(--muted)}
+.qa .aa{margin-top:4px;white-space:pre-wrap;overflow-wrap:anywhere}
+.qa .nn{margin-top:6px;font-size:12.5px;color:var(--warn)}
+.grp{font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin-top:6px}
+/* prep */
+.ai{border-radius:14px;padding:18px 20px;background:var(--orange-soft);margin-bottom:24px}
+.ai b{font-size:14.5px}
+.ai .ask{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:12px;background:var(--surface);border-radius:10px;padding:10px 12px}
+.ai code{font-size:12.5px;flex:1;min-width:200px;overflow-wrap:anywhere}
+.warnbox>div{border-left:3px solid var(--warn)}
+/* posting */
+.post{font-size:14px;line-height:1.65;color:var(--ink-2);max-width:78ch}
+.post .src{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);background:var(--surface-2);border-radius:6px;padding:2px 8px;margin-bottom:12px}
+.post .pt{font-size:18px;font-weight:700;color:var(--ink);margin:0 0 8px}
+.post h5{font-size:13.5px;font-weight:700;color:var(--ink);margin:18px 0 6px}
+.post p{margin:0 0 8px} .post ul{margin:0 0 8px;padding-left:20px}
+.post .pnote{margin:14px 0 0;padding:10px 12px;border-radius:10px;background:var(--warn-soft);font-size:12.5px}
+/* tech */
+.techintro{font-size:13px;color:var(--muted);margin-bottom:18px}
+.code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;color:var(--muted);background:var(--surface);border-radius:6px;padding:1px 6px;white-space:nowrap}
+.evl>div{padding:12px 0;border-top:1px solid var(--line)}
+.evl>div:first-child{border-top:0;padding-top:0}
+.evh{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin-bottom:4px}
+.evh b{color:var(--ink);font-size:13px}
+.evh .code{margin-left:auto}
+/* system log */
+.day{padding:6px 24px 4px;font-size:12px;font-weight:600;color:var(--muted);background:var(--surface-2)}
+.sysi{padding:14px 24px;border-top:1px solid var(--line-2)}
+.sysi .evh{margin-bottom:6px}
+.sysi .x{font-size:13.5px;color:var(--ink-2);max-width:96ch;overflow-wrap:anywhere}
+/* metrics */
+.mgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;align-items:start}
+table.t{width:100%;border-collapse:collapse;font-size:13px}
+table.t th{font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--faint);text-align:left;padding:10px 24px;border-top:1px solid var(--line-2);border-bottom:1px solid var(--line-2)}
+table.t td{padding:12px 24px;border-bottom:1px solid var(--line-2)}
+table.t tr:last-child td{border-bottom:0}
+table.t .n{text-align:right;font-variant-numeric:tabular-nums}
+
+@media (max-width:1280px){
+  .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .dgrid{grid-template-columns:minmax(0,1fr) 300px}
 }
+@media (max-width:1100px){
+  .dash,.mgrid{grid-template-columns:1fr}
+  .dgrid{grid-template-columns:1fr}
+  .rail{position:static;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px}
+  .rail .card+.card{margin-top:0}
+}
+@media (max-width:960px){
+  .shell{grid-template-columns:1fr}
+  .side{display:none}
+  .mbar{display:flex;align-items:center;gap:10px;font-weight:600;margin-bottom:14px}
+  .mbar .me-l{margin-left:auto;display:flex;gap:6px}
+  .mbar .me-l a{padding:6px 10px;background:var(--surface);box-shadow:var(--shadow-sm)}
+  .main{padding:16px 16px 92px}
+  .topbar{margin-bottom:16px}
+  .tools,.search{width:100%}
+  .stamp{display:none}
+  .bnav{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:10;background:var(--surface);border-top:1px solid var(--line);padding:6px 8px calc(6px + env(safe-area-inset-bottom,0px));justify-content:space-around}
+  .bnav a{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;font-weight:500;color:var(--muted);text-decoration:none;padding:4px 10px;border-radius:10px}
+  .bnav a svg{width:20px;height:20px}
+  .bnav a.on{color:var(--orange-deep);font-weight:600}
+}
+@media (max-width:720px){
+  .kpis{gap:12px}
+  .kpi{padding:14px;gap:10px;min-height:0;flex-direction:column;align-items:flex-start}
+  .kpi .ico{width:36px;height:36px}
+  .kpi .h{display:none}
+  .rows .r{grid-template-columns:1fr}
+  .rows .r .rt{text-align:left;padding-left:48px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .rows .r .rt .pill{margin:0}
+  .mbar .mt{white-space:nowrap}
+  .thead{display:none}
+  .trow{grid-template-columns:minmax(0,1fr);gap:6px;padding:13px 18px}
+  .trow>.cell,.trow>.c-st{display:none}
+  .trow>.c-meta{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center;padding-left:48px;white-space:normal}
+  #chips{flex-wrap:nowrap;overflow-x:auto;width:100%;scrollbar-width:none;padding-bottom:2px}
+  .chip{white-space:nowrap}
+  .filters{display:grid;grid-template-columns:1fr 1fr}
+  .filters select{width:100%}
+  .filters .sp{display:none}
+  .filters select[data-k=s],.filters .clear{grid-column:1/-1}
+  .ch,.pad,.tbody,.dhead{padding-left:18px;padding-right:18px}
+  .rows .r,.agenda .it,.mini .r,.sysi,table.t td,table.t th,.filters{padding-left:18px;padding-right:18px}
+  .kv{grid-template-columns:1fr;gap:0}.kv dd{margin-bottom:10px}
+  .dhead .acts{width:100%}
+  .tabs{padding:0 8px}
+  .tabs a.tech{margin-left:0}
+}
+@media (min-width:721px){.c-meta{display:none}}
+@media (max-width:400px){.mbar .mt{display:none}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <symbol id="i-today" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></symbol>
   <symbol id="i-list" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13"/><circle cx="3.5" cy="6" r="1"/><circle cx="3.5" cy="12" r="1"/><circle cx="3.5" cy="18" r="1"/></symbol>
   <symbol id="i-chart" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></symbol>
-  <symbol id="i-log" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+  <symbol id="i-log" viewBox="0 0 24 24"><path d="M12 8v4l3 2"/><path d="M3.05 11a9 9 0 1 1 .5 4"/><path d="M3 4v5h5"/></symbol>
   <symbol id="i-brief" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></symbol>
   <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></symbol>
   <symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
   <symbol id="i-flag" viewBox="0 0 24 24"><path d="M5 21V4h11l-2 4 2 4H5"/></symbol>
+  <symbol id="i-send" viewBox="0 0 24 24"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7z"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+  <symbol id="i-msg" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+  <symbol id="i-dot" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="i-in" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 10v7M8 7v.01M12 17v-4a2 2 0 0 1 4 0v4M12 10v7"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/></symbol>
 </svg>
 <div class="shell">
 <aside class="side" aria-label="Navegação">
-  <div class="brand"><span class="logo"><svg class="i"><use href="#i-brief"/></svg></span><span class="t">Busca de vagas</span></div>
+  <div class="brand"><span class="logo"><svg class="i"><use href="#i-brief"/></svg></span>Job Search System</div>
   <nav class="nav" id="nav">
-    <a href="#/hoje" data-r="hoje"><svg class="i"><use href="#i-today"/></svg>Hoje</a>
-    <a href="#/vagas" data-r="vagas"><svg class="i"><use href="#i-list"/></svg>Oportunidades<span class="n" id="n-opp"></span></a>
-    <a href="#/metricas" data-r="metricas"><svg class="i"><use href="#i-chart"/></svg>Métricas</a>
-    <a href="#/registro" data-r="registro"><svg class="i"><use href="#i-log"/></svg>Registro</a>
+    <a href="#/hoje" data-r="hoje"><span class="ic"><svg class="i"><use href="#i-home"/></svg></span>Painel</a>
+    <a href="#/vagas" data-r="vagas"><span class="ic"><svg class="i"><use href="#i-list"/></svg></span>Oportunidades<span class="n" id="n-opp"></span></a>
+    <a href="#/metricas" data-r="metricas"><span class="ic"><svg class="i"><use href="#i-chart"/></svg></span>Métricas</a>
   </nav>
-  <div class="side-foot">
-    <a href="https://mathewsportfolio.framer.website/" target="_blank" rel="noopener"><svg class="i"><use href="#i-ext"/></svg>Portfólio</a>
-    <a href="https://www.linkedin.com/in/mathewsesaki" target="_blank" rel="noopener"><svg class="i"><use href="#i-ext"/></svg>LinkedIn</a>
+  <div class="nav-label">Manutenção</div>
+  <nav class="nav sys"><a href="#/registro" data-r="registro"><span class="ic"><svg class="i"><use href="#i-log"/></svg></span>Histórico do sistema</a></nav>
+  <div class="me">
+    <div class="me-h"><span class="me-av">ME</span><div><b>Mathews Esaki</b><span>Links usados nas candidaturas</span></div></div>
+    <div class="me-l">
+      <a href="https://mathewsportfolio.framer.website/" target="_blank" rel="noopener" aria-label="Portfólio (abre em nova aba)"><svg class="i"><use href="#i-ext"/></svg>Portfólio</a>
+      <a href="https://www.linkedin.com/in/mathewsesaki" target="_blank" rel="noopener" aria-label="LinkedIn (abre em nova aba)"><svg class="i"><use href="#i-in"/></svg>LinkedIn</a>
+    </div>
   </div>
 </aside>
-<main class="main" id="view" tabindex="-1"></main>
+<main class="main">
+  <div class="mbar"><span class="logo"><svg class="i"><use href="#i-brief"/></svg></span><span class="mt">Busca de vagas</span>
+    <div class="me-l"><a href="https://mathewsportfolio.framer.website/" target="_blank" rel="noopener" aria-label="Portfólio (abre em nova aba)"><svg class="i"><use href="#i-ext"/></svg>Portfólio</a><a href="https://www.linkedin.com/in/mathewsesaki" target="_blank" rel="noopener" aria-label="LinkedIn (abre em nova aba)"><svg class="i"><use href="#i-in"/></svg>LinkedIn</a></div></div>
+  <header class="topbar"><div><div class="crumb" id="crumb"></div><h1 id="title"></h1></div>
+    <div class="tools"><label class="search"><svg class="i"><use href="#i-search"/></svg><input id="gq" type="search" placeholder="Buscar empresa, cargo, anúncio, respostas…" aria-label="Buscar oportunidades"><kbd>/</kbd></label><span class="stamp" id="stamp"></span></div></header>
+  <div id="view"></div>
+</main>
+<nav class="bnav" id="bnav" aria-label="Navegação">
+  <a href="#/hoje" data-r="hoje"><svg class="i"><use href="#i-home"/></svg>Painel</a>
+  <a href="#/vagas" data-r="vagas"><svg class="i"><use href="#i-list"/></svg>Vagas</a>
+  <a href="#/metricas" data-r="metricas"><svg class="i"><use href="#i-chart"/></svg>Métricas</a>
+  <a href="#/registro" data-r="registro"><svg class="i"><use href="#i-log"/></svg>Sistema</a>
+</nav>
 </div>
 <script type="application/json" id="idx">[{"id":"OPP-0001","app":null,"co":"Aurify","role":"UI/UX Design Engineer","st":"discarded","tr":"INTL","pr":"C","dec":"DO-NOT-APPLY","src":"JOB-BOARD","sd":"Dribbble","df":"2026-09-21","dd":"2026-09-21","ds":"","li":"","lt":"","fr":"","frt":"","lr":"","iv":null,"niv":0,"na":"","nad":"","gate":"PASS","s":"opp-0001 aurify aurify aurify ui/ux design engineer intl job-board dribbble unknown"},{"id":"OPP-0002","app":"APP-0001","co":"U.S. collectibles e-commerce (via Patagonia Recruiting)","role":"Designer & Marketing Specialist | E-commerce","st":"waiting","tr":"INTL","pr":"B","dec":"APPLY","src":"LINKEDIN-POST","sd":"LinkedIn","df":"2026-09-24","dd":"2026-09-24","ds":"2026-09-24","li":"2026-09-24 07:16","lt":"SUBMITTED","fr":"","frt":"","lr":"","iv":null,"niv":0,"na":"","nad":"","gate":"PASS","s":"opp-0002 app-0001 undisclosed u.s. e-commerce collectibles company (via recruiter) u.s. collectibles e-commerce (via patagonia recruiting) undisclosed u.s. e-commerce collectibles company (client of an unnamed recruiter) designer & marketing specialist | e-commerce intl linkedin-post linkedin https://ats.patagoniarecruiting.com/careers/designer-marketing-specialist/apply"},{"id":"OPP-0003","app":"APP-0002","co":"Listo","role":"Graphic Designer","st":"waiting","tr":"INTL","pr":"B","dec":"APPLY","src":"LINKEDIN-POST","sd":"LinkedIn","df":"2026-09-24","dd":"2026-09-24","ds":"2026-09-24","li":"2026-09-24 07:44","lt":"SUBMITTED","fr":"","frt":"","lr":"","iv":null,"niv":0,"na":"","nad":"","gate":"PASS","s":"opp-0003 app-0002 listo listo listo graphic designer intl linkedin-post linkedin https://lnkd.in/dn8fnekv"},{"id":"OPP-0004","app":null,"co":"Bernoulli Educação","role":"DESIGNER","st":"discarded","tr":"BR-SUBSTITUIR","pr":"C","dec":"DO-NOT-APPLY","src":"LINKEDIN-JOBS","sd":"LinkedIn","df":"2026-09-24","dd":"2026-09-24","ds":"","li":"","lt":"","fr":"","frt":"","lr":"","iv":null,"niv":0,"na":"","nad":"","gate":"PASS","s":"opp-0004 bernoulli educacao bernoulli educacao bernoulli educacao designer br-substituir linkedin-jobs linkedin https://www.linkedin.com/jobs/view/4469530380/"},{"id":"OPP-0005","app":"APP-0003","co":"MetaKosmos (via Jobbol)","role":"Designer Júnior","st":"waiting","tr":"BR-CONCILIAR","pr":"C","dec":"APPLY-WITH-CONDITIONS","src":"LINKEDIN-JOBS","sd":"LinkedIn","df":"2026-09-24","dd":"2026-09-24","ds":"2026-09-24","li":"2026-09-24 09:06","lt":"SUBMITTED","fr":"","frt":"","lr":"","iv":null,"niv":0,"na":"","nad":"","gate":"PASS","s":"opp-0005 app-0003 metakosmos (via jobbol) metakosmos (via jobbol) metakosmos designer junior br-conciliar linkedin-jobs linkedin https://www.linkedin.com/jobs/view/4471170612/"},{"id":"OPP-0006","app":"APP-0004","co":"Vinta Software","role":"Senior Marketing Web Designer","st":"waiting","tr":"INTL","pr":"A","dec":"APPLY","src":"LINKEDIN-JOBS","sd":"LinkedIn","df":"2026-09-25","dd":"2026-09-25","ds":"2026-09-25","li":"2026-09-25 07:58","lt":"NOTE","fr":"","frt":"","lr":"","iv":null,"niv":0,"na":"","nad":"","gate":"PASS","s":"opp-0006 app-0004 vinta software vinta software vinta software senior marketing web designer intl linkedin-jobs linkedin https://www.linkedin.com/jobs/view/4469784586/"},{"id":"OPP-0007","app":null,"co":"CI&T (via Jobgether, empresa não revelada na publicação original)","role":"Senior Graphic Designer","st":"discarded","tr":"BR-SUBSTITUIR","pr":"C","dec":"DO-NOT-APPLY","src":"LINKEDIN-JOBS","sd":"LinkedIn","df":"2026-09-28","dd":"2026-09-28","ds":"","li":"","lt":"","fr":"","frt":"","lr":"","iv":null,"niv":0,"na":"","nad":"","gate":"PASS","s":"opp-0007 ci&t (revealed; originally posted as undisclosed partner via jobgether) ci&t (via jobgether, empresa nao revelada na publicacao original) ci&t senior graphic designer br-substituir linkedin-jobs linkedin https://www.linkedin.com/jobs/view/4471321035/"},{"id":"OPP-0008","app":null,"co":"Safeguard Global","role":"Designer","st":"discarded","tr":"BR-SUBSTITUIR","pr":"C","dec":"DO-NOT-APPLY","src":"LINKEDIN-JOBS","sd":"LinkedIn","df":"2026-09-28","dd":"2026-09-28","ds":"","li":"","lt":"","fr":"","frt":"","lr":"","iv":null,"niv":0,"na":"","nad":"","gate":"PASS","s":"opp-0008 safeguard global safeguard global safeguard global designer br-substituir linkedin-jobs linkedin unknown"},{"id":"OPP-0009","app":null,"co":"CI&T","role":"Senior Graphic Designer","st":"discarded","tr":"BR-SUBSTITUIR","pr":"C","dec":"DO-NOT-APPLY","src":"LINKEDIN-JOBS","sd":"LinkedIn","df":"2026-09-28","dd":"2026-09-28","ds":"","li":"","lt":"","fr":"","frt":"","lr":"","iv":null,"niv":0,"na":"","nad":"","gate":"PASS","s":"opp-0009 ci&t ci&t ci&t senior graphic designer br-substituir linkedin-jobs linkedin https://www.linkedin.com/jobs/view/4472010492/"},{"id":"OPP-0010","app":null,"co":"Boldr","role":"Senior Graphic Designer / Brand & Creative Lead","st":"discarded","tr":"BR-SUBSTITUIR","pr":"C","dec":"DO-NOT-APPLY","src":"LINKEDIN-JOBS","sd":"LinkedIn","df":"2026-09-28","dd":"2026-09-28","ds":"","li":"","lt":"","fr":"","frt":"","lr":"","iv":null,"niv":0,"na":"","nad":"","gate":"FAIL","s":"opp-0010 boldr boldr boldr senior graphic designer / brand & creative lead br-substituir linkedin-jobs linkedin https://www.linkedin.com/jobs/view/4470553672/"},{"id":"OPP-0011","app":"APP-0005","co":"Agência 8COM","role":"Designer Gráfico","st":"ack","tr":"BR-CONCILIAR","pr":"B","dec":"APPLY","src":"LINKEDIN-JOBS","sd":"LinkedIn","df":"2026-09-28","dd":"2026-09-28","ds":"2026-09-28","li":"2026-09-29 12:20","lt":"NOTE","fr":"2026-09-29","frt":"ACK-HUMAN","lr":"2026-09-29 11:55","iv":null,"niv":0,"na":"","nad":"","gate":"PASS","s":"opp-0011 app-0005 agencia 8com agencia 8com agencia 8com designer grafico br-conciliar linkedin-jobs linkedin https://www.linkedin.com/jobs/view/4472707540/"},{"id":"OPP-0012","app":"APP-0006","co":"Sur Global","role":"Production Designer","st":"waiting","tr":"INTL","pr":"B","dec":"APPLY-WITH-CONDITIONS","src":"LINKEDIN-JOBS","sd":"LinkedIn","df":"2026-09-29","dd":"2026-09-29","ds":"2026-09-29","li":"2026-09-29 11:05","lt":"NOTE","fr":"","frt":"","lr":"","iv":null,"niv":0,"na":"","nad":"","gate":"PASS","s":"opp-0012 app-0006 sur global sur global sur global production designer intl linkedin-jobs linkedin https://www.linkedin.com/jobs/view/4472787349/"},{"id":"OPP-0013","app":"APP-0007","co":"Foundey (formerly Uitify)","role":"UI Designer (LinkedIn title) / Web Designer (posting body — inconsistency in the posting itself)","st":"waiting","tr":"INTL","pr":"C","dec":"APPLY-WITH-CONDITIONS","src":"LINKEDIN-JOBS","sd":"LinkedIn","df":"2026-09-29","dd":"2026-09-29","ds":"2026-09-29","li":"2026-09-29 11:45","lt":"SUBMITTED","fr":"","frt":"","lr":"","iv":null,"niv":0,"na":"","nad":"","gate":"PASS","s":"opp-0013 app-0007 foundey (formerly uitify) foundey (formerly uitify) foundey (formerly uitify) ui designer (linkedin title) / web designer (posting body inconsistency in the posting itself) intl linkedin-jobs linkedin https://www.linkedin.com/jobs/view/4470864731/"}]</script>
 <script type="application/json" id="meta">{"generated":"2026-10-03","mats":{"CV-EN-001":{"t":"RESUME","lang":"EN","v":"EN master — Creative Lead & Graphic Designer | Brand, UX/UI, Print & AI-Integrated Design","f":"materials/CV-EN-001.md","st":"ACTIVE"},"CV-PT-001":{"t":"RESUME","lang":"PT","v":"PT master — Lider de Criacao e Designer Grafico | Brand, UX/UI, Impressos e Design Integrado com IA","f":"materials/CV-PT-001.md","st":"ACTIVE"},"POR-001":{"t":"PORTFOLIO","lang":"EN","v":"Canonical portfolio","f":"https://mathewsportfolio.framer.website/","st":"ACTIVE"},"STD-001":{"t":"STANDARD-ANSWER","lang":"EN","v":"Why a Creative Lead is applying below level","f":"materials/STD-001.md","st":"ACTIVE"},"STD-002":{"t":"STANDARD-ANSWER","lang":"EN","v":"The 2023-2024 NEO MEDIA / Agencia W2 overlap","f":"materials/STD-002.md","st":"ACTIVE"},"CV-EN-002":{"t":"RESUME","lang":"EN","v":"EN — Creative Lead & Graphic Designer | Brand, Web & Marketing Design, AI-Built Websites","f":"materials/CV-EN-002.md","st":"RETIRED"},"CV-EN-003":{"t":"RESUME","lang":"EN","v":"EN — Creative Lead & Graphic Designer | Brand, Web & Marketing Design, AI-Built Websites (final)","f":"materials/CV-EN-003.md","st":"ACTIVE"},"CV-PT-002":{"t":"RESUME","lang":"PT","v":"PT — Líder de Criação e Designer Gráfico | Brand, UX/UI, Materiais Impressos e Design Integrado com IA (versão eventos)","f":"materials/CV-PT-002.md","st":"ACTIVE"}},"plats":[{"name":"Dribbble","type":"JOB-BOARD"},{"name":"LinkedIn","type":"SOCIAL-NETWORK"}],"nev":95,"nsys":28}</script>
@@ -231,33 +426,48 @@ const fold=s=>String(s??"").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase(
 const MES=["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"];
 const fd=d=>{if(!d)return"";const[y,m,dd]=d.slice(0,10).split("-");return `${+dd} ${MES[+m-1]} ${y}`;};
 const fds=d=>{if(!d)return"";const[,m,dd]=d.slice(0,10).split("-");return `${+dd} ${MES[+m-1]}`;};
-const NOW=new Date(), TODAY=NOW.toISOString().slice(0,10);
+const TODAY=new Date().toISOString().slice(0,10);
 const days=d=>d?Math.floor((Date.parse(TODAY)-Date.parse(d.slice(0,10)))/864e5):null;
-const ago=n=>n==null?"":n<=0?(n<0?`em ${-n} dia${n<-1?"s":""}`:"hoje"):n===1?"há 1 dia":`há ${n} dias`;
+const ago=n=>n==null?"":n<0?`em ${-n} dia${n<-1?"s":""}`:n===0?"hoje":n===1?"ontem":`há ${n} dias`;
+const icon=(id,c="i")=>`<svg class="${c}"><use href="#${id}"/></svg>`;
 const TRACK={"INTL":"Internacional","BR-CONCILIAR":"Brasil · paralela à W2","BR-SUBSTITUIR":"Brasil · substituir a W2"};
+const TRK_S={"INTL":"Internacional","BR-CONCILIAR":"BR · paralela","BR-SUBSTITUIR":"BR · substituir W2"};
 const ARR={"CONTRACTOR-FT":"Contractor · integral","PART-TIME":"Meio período","FREELANCE-PROJECT":"Freelance por projeto","EMPLOYEE-EOR":"Empregado (EOR)","CLT":"CLT","UNCLEAR":"Contrato não informado"};
 const LOC={"WORLDWIDE":"Qualquer país","LATAM":"América Latina","BRAZIL":"Brasil","AMERICAS":"Américas","US-ONLY":"Só EUA","EU-ONLY":"Só Europa","SAO-PAULO-CITY-ONLY":"Só cidade de São Paulo","OTHER":"Outra região","UNCLEAR":"Região não informada"};
 const SEN={"JUNIOR":"Júnior","MID":"Pleno","SENIOR":"Sênior","LEAD":"Liderança","UNSPECIFIED":"Nível não informado"};
 const PER={"HOUR":"hora","MONTH":"mês","YEAR":"ano","PROJECT":"projeto"};
-const CHAN={"COMPANY-ATS":"Sistema da empresa","LINKEDIN-EASY-APPLY":"LinkedIn (candidatura simplificada)","EMAIL":"E-mail","FORM":"Formulário","MARKETPLACE":"Marketplace","REFERRAL":"Indicação","DM":"Mensagem direta"};
+const CHAN={"COMPANY-ATS":"site da empresa","LINKEDIN-EASY-APPLY":"LinkedIn (candidatura simplificada)","EMAIL":"e-mail","FORM":"formulário","MARKETPLACE":"marketplace","REFERRAL":"indicação","DM":"mensagem direta"};
 const SRC={"LINKEDIN-JOBS":"LinkedIn Vagas","LINKEDIN-POST":"LinkedIn Posts","JOB-BOARD":"Site de vagas","MARKETPLACE":"Marketplace","OUTREACH":"Contato direto","REFERRAL":"Indicação","COMPANY-SITE":"Site da empresa","OTHER":"Outro"};
-const DEC={"APPLY":"Aplicar","APPLY-WITH-CONDITIONS":"Aplicar com ressalvas","DO-NOT-APPLY":"Não aplicar","DEFER":"Adiar (encerrada)"};
-const REPLY={"REJECTION":"recusa","ACK-HUMAN":"confirmação de pessoa","SCREENING-INVITE":"convite para triagem","TEST-INVITE":"convite para teste","INTERVIEW-INVITE":"convite para entrevista","QUESTION":"pergunta","OFFER":"oferta"};
-const EVT={"SUBMITTED":"Candidatura enviada","REPLY-RECEIVED":"Resposta recebida","FOLLOW-UP-SENT":"Follow-up enviado","STATUS-CHANGE":"Mudança de etapa","INTERVIEW-SCHEDULED":"Entrevista marcada","INTERVIEW-HELD":"Entrevista realizada","OFFER":"Oferta","REJECTED":"Recusa","WITHDRAWN":"Retirada","NOTE":"Registro","CREATED":"Registro criado","EVALUATED":"Avaliação","DECIDED":"Decisão","CORRECTION":"Correção"};
+const DEC={"APPLY":"Aplicar","APPLY-WITH-CONDITIONS":"Aplicar com ressalvas","DO-NOT-APPLY":"Não aplicar","DEFER":"Adiada"};
+const REPLY={"REJECTION":"recusa","ACK-HUMAN":"confirmação de uma pessoa","SCREENING-INVITE":"convite para triagem","TEST-INVITE":"convite para teste","INTERVIEW-INVITE":"convite para entrevista","QUESTION":"pergunta","OFFER":"oferta"};
+const APP_ST={"SUBMITTED":"Aguardando resposta","ACK":"Recebida pela empresa","SCREENING":"Triagem","TEST":"Teste","INTERVIEW":"Entrevista","OFFER":"Oferta","HIRED":"Contratado","REJECTED":"Recusada","NO-RESPONSE":"Sem resposta","WITHDRAWN":"Retirada","APPLIED":"Candidatura enviada"};
+const EVT={"SUBMITTED":"Candidatura enviada","REPLY-RECEIVED":"Resposta recebida","FOLLOW-UP-SENT":"Follow-up enviado","STATUS-CHANGE":"Mudança de etapa","INTERVIEW-SCHEDULED":"Entrevista marcada","INTERVIEW-HELD":"Entrevista realizada","OFFER":"Oferta","REJECTED":"Recusa","WITHDRAWN":"Retirada","NOTE":"Anotação","CREATED":"Registro criado","EVALUATED":"Avaliação","DECIDED":"Decisão","CORRECTION":"Correção"};
+const AREA={"SYSTEM":"Sistema","PROFESSIONAL_CONTEXT":"Contexto profissional","OPERATIONS":"Regras de operação","SCHEMA":"Estrutura dos dados","VOCAB":"Vocabulário","CRITERIA":"Critérios de busca","MATERIALS":"Materiais","EVENTS":"Eventos"};
 const ROUND={"SCREENING":"Triagem","PORTFOLIO":"Portfólio","TEST":"Teste","PANEL":"Painel","CULTURAL":"Cultural","FINAL":"Final"};
-const STAGE={waiting:["Aguardando resposta","info","active"],ack:["Recebida pela empresa","info","active"],screening:["Triagem","ok","active"],test:["Teste","ok","active"],interview:["Entrevista","ok","active"],offer:["Oferta","ok","active"],toapply:["A aplicar","warn","active"],reeval:["Reavaliar","warn","active"],evaluated:["Avaliada","","active"],hired:["Contratado","ok","closed"],rejected:["Recusada","no","closed"],noresp:["Sem resposta","","closed"],withdrawn:["Retirada","","closed"],discarded:["Descartada","","discarded"],deferred:["Adiada","","discarded"],expired:["Expirada","","discarded"]};
+const STAGE={waiting:["Aguardando resposta","info","active"],ack:["Recebida pela empresa","info","active"],screening:["Triagem","ok","active"],test:["Teste","ok","active"],interview:["Entrevista","ok","active"],offer:["Oferta","ok","active"],toapply:["A aplicar","hot","active"],reeval:["Reavaliar","warn","active"],evaluated:["Avaliada","","active"],hired:["Contratado","ok","closed"],rejected:["Recusada","no","closed"],noresp:["Sem resposta","","closed"],withdrawn:["Retirada","","closed"],discarded:["Descartada","","discarded"],deferred:["Adiada","","discarded"],expired:["Expirada","","discarded"]};
 const pill=st=>{const s=STAGE[st]||[st,""];return `<span class="pill ${s[1]}">${esc(s[0])}</span>`;};
 const applied=r=>!!r.app;
 const isActive=r=>(STAGE[r.st]||[])[2]==="active";
-const icon=id=>`<svg class="i"><use href="#${id}"/></svg>`;
-const lastTxt=r=>{if(!r.li)return"";const n=days(r.li);const k={"SUBMITTED":"enviada","REPLY-RECEIVED":"resposta","FOLLOW-UP-SENT":"follow-up","INTERVIEW-SCHEDULED":"entrevista marcada","INTERVIEW-HELD":"entrevista","STATUS-CHANGE":"mudança de etapa","NOTE":"registro"}[r.lt]||"interação";return `${k} ${ago(n)}`;};
-const salary=a=>{if(!a.salary_asked_value)return a.salary_asked_period==="NOT-ASKED"?"Não perguntaram no envio":"Não informado no envio";return `${a.salary_asked_currency} ${a.salary_asked_value}${PER[a.salary_asked_period]?"/"+PER[a.salary_asked_period]:""}`;};
-function linkify(s){return esc(s).replace(/(https?:\/\/[^\s)\]]+)/g,u=>`<a href="${u}" target="_blank" rel="noopener">${u}</a>`);}
+const AVC=["#F7751E","#262628","#1C8BD8","#1F9D55","#8E44AD","#C0392B","#16A085","#D4A017"];
+function avatar(name,cls="av"){const c=String(name||"?").replace(/\(.*?\)/g,"").trim();const w=c.split(/\s+/).filter(x=>/[A-Za-zÀ-ú0-9]/.test(x));
+  const ini=(w.length>1?w[0][0]+w[1][0]:c.replace(/[^A-Za-zÀ-ú0-9]/g,"").slice(0,2)).toUpperCase();let h=0;for(const ch of c)h=(h*31+ch.charCodeAt(0))>>>0;
+  return `<span class="${cls}" style="background:${AVC[h%AVC.length]}" aria-hidden="true">${esc(ini)}</span>`;}
+const coCell=r=>`<div class="co">${avatar(r.co)}<div><div class="co-n">${esc(r.co)}</div><div class="co-r">${esc(r.role)}</div></div></div>`;
+const LT={"SUBMITTED":"enviada","REPLY-RECEIVED":"resposta recebida","FOLLOW-UP-SENT":"follow-up","INTERVIEW-SCHEDULED":"entrevista marcada","INTERVIEW-HELD":"entrevista","STATUS-CHANGE":"mudança de etapa","NOTE":"atualizada"};
+const lastTxt=r=>r.li?`${LT[r.lt]||"interação"} ${ago(days(r.li))}`:"";
+function linkify(s){return esc(s).replace(/(https?:\/\/[^\s)\]'"]+)/g,u=>`<a href="${u}" target="_blank" rel="noopener">${u}</a>`);}
+function clamp(s,n=220){s=String(s||"");if(s.length<=n+40)return linkify(s);const cut=s.slice(0,n).replace(/\s+\S*$/,"");return `<details class="clamp"><summary>${esc(cut)}… <span class="rd">ler tudo</span></summary>${linkify(s)}</details>`;}
+const cap=s=>s?s[0].toUpperCase()+s.slice(1):"";
+const rnote=s=>`<details class="rnote"><summary>nota do registro</summary><div>${linkify(s)}</div></details>`;
+const more=(label,html)=>`<details class="rnote"><summary>${label}</summary><div>${html}</div></details>`;
+const ba=e=>[e.old_value&&`<p class="fine">Antes: ${esc(e.old_value)}</p>`,e.new_value&&`<p class="fine">Depois: ${esc(e.new_value)}</p>`].filter(Boolean).join("");
+const known=v=>v&&!/^(UNKNOWN|NOT-REQUESTED|NOT-POSTED|N\/A)/.test(v);
+const nask=v=>!v||/^NOT-ASKED/.test(v)?"":v;
 
 /* ---------- posting formatter: structure only, the words stay verbatim ---------- */
 const BUL=/^\s*(?:[*\-•·✅✔☑]|\d+[.)])\s*/;
 function isHeading(t,next){if(!t||t.length>60||BUL.test(t))return false;if(/[.,;]$/.test(t))return false;if(/:$/.test(t))return true;if(t===t.toUpperCase()&&/[A-ZÀ-Ú]{3}/.test(t))return true;return !!next&&BUL.test(next)&&t.split(/\s+/).length<=7;}
-function postLines(raw){return raw.replace(/\r/g,"").split("\n");}
+const postLines=raw=>raw.replace(/\r/g,"").split("\n");
 function formatPosting(raw){
   const lines=postLines(raw);let label="",notes=[],out=[],list=null,first=true;
   const flush=()=>{if(list){out.push(`<ul>${list.map(x=>`<li>${x}</li>`).join("")}</ul>`);list=null;}};
@@ -273,10 +483,9 @@ function formatPosting(raw){
     out.push(`<p>${linkify(t)}</p>`);
   }
   flush();
-  return `<span class="src">Texto original${label?" · "+esc(label):""}</span>`+out.join("")+(notes.length?`<div class="note"><b>Nota do registro:</b> ${notes.map(esc).join(" ")}</div>`:"");
+  return `<span class="src">Texto original${label?" · "+esc(label):""}</span>`+out.join("")+(notes.length?`<div class="pnote"><b>Nota do registro:</b> ${notes.map(esc).join(" ")}</div>`:"");
 }
-/* verbatim blocks of the posting under requirement-like headings (no interpretation) */
-const REQ=/(requirement|qualification|must|what you|you have|you bring|about you|skills|experience|requisito|qualifica|o que buscamos|perfil|diferencia|nice to have|bonus|será um diferencial)/i;
+const REQ=/(requirement|qualification|must|what you|you have|you bring|about you|skills|experience|requisito|qualifica|o que buscamos|perfil|diferencia|nice to have|bonus)/i;
 function requirements(raw){
   if(!raw)return[];const L=postLines(raw).map(x=>x.trim());const out=[];let cur=null;
   for(let i=0;i<L.length;i++){const t=L[i];if(!t)continue;let j=i+1;while(j<L.length&&!L[j])j++;
@@ -286,73 +495,96 @@ function requirements(raw){
   return out.filter(x=>x.items.length);
 }
 
-/* ---------- router ---------- */
-const view=$("#view");
-function go(h){location.hash=h;}
-function setNav(r){document.querySelectorAll("#nav a").forEach(a=>a.classList.toggle("on",a.dataset.r===r||(r==="vaga"&&a.dataset.r==="vagas")));}
+/* ---------- shell: router, header, global search ---------- */
+const view=$("#view"), gq=$("#gq");
+function head(crumb,title){$("#crumb").innerHTML=crumb;$("#title").textContent=title;document.title=`${title} · Busca de vagas`;}
+function setNav(r){document.querySelectorAll("#nav a,.nav.sys a,#bnav a").forEach(a=>a.classList.toggle("on",a.dataset.r===r||(r==="vaga"&&a.dataset.r==="vagas")));}
 function route(){
   const h=location.hash.slice(1)||"/hoje";const[path,qs]=h.split("?");const p=path.split("/").filter(Boolean);
   setNav(p[0]||"hoje");
-  if(p[0]==="vaga"&&BY[p[1]])viewDetail(p[1],p[2]||"resumo");
+  if(p[0]!=="vagas"&&document.activeElement!==gq)gq.value="";
+  if(p[0]==="vaga"&&BY[p[1]])viewDetail(p[1],p[2]||"visao");
   else if(p[0]==="vagas")viewList(new URLSearchParams(qs||""));
   else if(p[0]==="metricas")viewMetrics();
-  else if(p[0]==="registro")viewAudit();
+  else if(p[0]==="registro")viewSystem();
   else viewToday();
 }
-addEventListener("hashchange",()=>{route();window.scrollTo(0,0);});
+addEventListener("hashchange",()=>{route();if(document.activeElement!==gq)window.scrollTo(0,0);});
+gq.addEventListener("input",()=>{clearTimeout(window._qt);window._qt=setTimeout(()=>{
+  if(location.hash.startsWith("#/registro")){window._sysDraw&&window._sysDraw();return;}
+  const v=gq.value;const onList=location.hash.startsWith("#/vagas");
+  const N=new URLSearchParams(onList?(location.hash.split("?")[1]||""):"");v?N.set("q",v):N.delete("q");
+  if(onList){history.replaceState(null,"","#/vagas?"+N);renderRows(N);}else location.hash="#/vagas?"+N;},140);});
+addEventListener("keydown",e=>{if(e.key==="/"&&!/INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName)){e.preventDefault();gq.focus();}});
 $("#n-opp").textContent=IDX.length;
+$("#stamp").textContent="Atualizado em "+fds(META.generated);
 
-/* ---------- Hoje ---------- */
-function rowLink(r,right,meta){return `<a class="li" href="#/vaga/${r.id}"><div class="w"><div class="t">${esc(r.co)}</div><div class="m">${esc(meta??r.role)}</div></div><div class="r">${right}</div></a>`;}
+/* ---------- Painel ---------- */
 function viewToday(){
-  document.title="Hoje · Busca de vagas";
-  const apps=IDX.filter(applied), active=IDX.filter(r=>applied(r)&&isActive(r));
-  const planned=IDX.filter(r=>r.nad).sort((a,b)=>a.nad<b.nad?-1:1);
+  head(`Busca de vagas / <b>Painel</b>`,"Painel");
+  const apps=IDX.filter(applied), active=apps.filter(isActive);
+  const waiting=active.filter(r=>!r.fr), replied=apps.filter(r=>r.fr);
+  const planned=IDX.filter(r=>r.nad||r.na).sort((a,b)=>(a.nad||"9")<(b.nad||"9")?-1:1);
   const ivs=IDX.filter(r=>r.iv&&r.iv.dt).sort((a,b)=>a.iv.dt<b.iv.dt?-1:1);
-  const replies=IDX.filter(r=>r.lr&&days(r.lr)<=30).sort((a,b)=>a.lr<b.lr?1:-1);
-  const silent=active.slice().sort((a,b)=>(days(b.li)||0)-(days(a.li)||0));
-  const wk=IDX.filter(r=>days(r.df)<=7), wkApp=apps.filter(r=>days(r.ds)<=7);
+  const recent=IDX.filter(r=>r.lr&&days(r.lr)<=30).sort((a,b)=>a.lr<b.lr?1:-1);
+  const byLast=active.slice().sort((a,b)=>(days(b.li)||0)-(days(a.li)||0));
   const toapply=IDX.filter(r=>r.st==="toapply");
-  view.innerHTML=`<div class="vh"><div><div class="crumb">${fd(TODAY)}</div><h1>Hoje</h1></div></div>
-  <div class="stats"><span><b>${IDX.length}</b>vagas vistas</span><span><b>${apps.length}</b>candidaturas</span><span><b>${active.length}</b>em andamento</span><span><b>${apps.filter(r=>r.fr).length}</b>com resposta</span><span><b>${IDX.filter(r=>r.niv).length}</b>com entrevista</span></div>
-  <div class="grid2">
-    <section class="card"><h2>${icon("i-flag")}Ações planejadas <span class="c">${planned.length||""}</span></h2>${planned.length?planned.map(r=>{const n=days(r.nad);return rowLink(r,n>0?`<span class="late">atrasada ${ago(n)}</span>`:n===0?`<b>hoje</b>`:fd(r.nad),r.na);}).join(""):`<p class="empty">Nenhuma ação planejada. Para criar uma, peça ao agente algo como «lembrar de mandar follow-up para a empresa X em 5 dias» — o sistema só registra o que você definir.</p>`}</section>
-    <section class="card"><h2>${icon("i-today")}Entrevistas <span class="c">${ivs.length||""}</span></h2>${ivs.length?ivs.map(r=>rowLink(r,`${fd(r.iv.dt)} ${esc(r.iv.dt.slice(11,16))}`,`${ROUND[r.iv.round]||r.iv.round||"Entrevista"} · ${r.role}`)).join(""):`<p class="empty">Nenhuma entrevista registrada.</p>`}</section>
-    <section class="card"><h2>Respostas recentes <span class="c">${replies.length||""}</span></h2>${replies.length?replies.map(r=>rowLink(r,ago(days(r.lr)),`${REPLY[r.frt]?REPLY[r.frt]+" · ":""}${r.role}`)).join(""):`<p class="empty">Nenhuma resposta nos últimos 30 dias.</p>`}</section>
-    <section class="card"><h2>Em andamento <span class="c">${active.length}</span></h2>${silent.length?silent.map(r=>{const n=days(r.li);return rowLink(r,`${pill(r.st)}<div class="m" style="margin-top:3px">${n>=21?'<span class="late">sem retorno '+ago(n)+'</span>':esc(lastTxt(r))}</div>`);}).join(""):`<p class="empty">Nenhuma candidatura em andamento.</p>`}${toapply.length?`<p class="fine" style="margin-top:8px">${toapply.length} vaga(s) com decisão de aplicar ainda sem candidatura: ${toapply.map(r=>`<a href="#/vaga/${r.id}">${esc(r.co)}</a>`).join(", ")}</p>`:""}</section>
-  </div>
-  <section class="card" style="margin-top:16px"><h2>Últimos 7 dias</h2><p class="sub">${wk.length} vaga(s) vista(s) · ${wkApp.length} candidatura(s) enviada(s) · ${IDX.filter(r=>r.lr&&days(r.lr)<=7).length} resposta(s)</p>${wk.slice().sort((a,b)=>a.df<b.df?1:-1).slice(0,8).map(r=>rowLink(r,pill(r.st))).join("")}</section>
-  <p class="fine" style="margin-top:14px">“Sem retorno há 21+ dias” é só uma marca de métrica: follow-up é sempre decisão sua. Dados de ${fd(META.generated)}.</p>`;
+  const wk=apps.filter(r=>days(r.ds)<=7).length;
+  const kpi=(cls,ic,n,l,h,href)=>`<a class="kpi ${cls}" href="${href}"><span class="ico">${icon(ic)}</span><div><div class="n">${n}</div><div class="l">${l}</div></div>${h?`<span class="h">${h}</span>`:""}</a>`;
+  const dateBox=(d,hot)=>{const[,m,dd]=d.slice(0,10).split("-");return `<span class="date${hot?" hot":""}"><b>${+dd}</b><span>${MES[+m-1]}</span></span>`;};
+  const agenda=[...planned.map(r=>({d:r.nad,r,t:r.na||"Ação planejada",s:r.co,late:r.nad&&days(r.nad)>0,k:"a"})),...ivs.map(r=>({d:r.iv.dt,r,t:`Entrevista · ${ROUND[r.iv.round]||r.iv.round||""}`,s:`${r.co} · ${r.iv.dt.slice(11,16)}`,k:"i"}))].sort((a,b)=>(a.d||"9")<(b.d||"9")?-1:1);
+  const fun=[["Vagas avaliadas",IDX.length,IDX.length],["Passaram nos critérios",IDX.filter(r=>r.gate==="PASS").length,IDX.length],["Candidaturas enviadas",apps.length,IDX.length],["Com resposta",replied.length,apps.length],["Com entrevista",IDX.filter(r=>r.niv).length,apps.length]];
+  view.innerHTML=`<div class="kpis">
+    ${kpi("hot","i-send",apps.length,"Candidaturas",wk?`+${wk} na semana`:"","#/vagas?v=applied")}
+    ${kpi("","i-clock",waiting.length,"Aguardando resposta","","#/vagas?v=waiting")}
+    ${kpi("","i-msg",replied.length,"Com resposta","","#/vagas?v=replied")}
+    ${kpi("","i-cal",IDX.filter(r=>r.niv).length,"Entrevistas","","#/vagas?v=interview")}</div>
+  <div class="dash">
+    <section class="card"><div class="ch"><div><h2>Em andamento</h2><div class="sub"><b>${active.length}</b> candidatura(s) ativas · as mais antigas sem interação primeiro</div></div><a class="link" href="#/vagas?v=active">Ver todas</a></div>
+      <div class="rows">${byLast.length?byLast.map(r=>{const n=days(r.li);return `<a class="r" href="#/vaga/${r.id}">${coCell(r)}<div class="rt">${pill(r.st)}<div>${n>=21?`<span class="late">sem retorno ${ago(n)}</span>`:esc(lastTxt(r))}</div></div></a>`;}).join(""):`<p class="empty pad">Nenhuma candidatura em andamento.</p>`}</div>
+      ${toapply.length?`<div class="ch" style="border-top:1px solid var(--line-2)"><div><h2 style="font-size:14px">Decidi aplicar, ainda não enviei</h2></div></div><div class="rows mini">${toapply.map(r=>`<a class="r" href="#/vaga/${r.id}">${coCell(r)}<div class="rt">${fds(r.dd)}</div></a>`).join("")}</div>`:""}
+    </section>
+    <div class="stack">
+      <section class="card agenda"><div class="ch"><div><h2>Agenda</h2><div class="sub">Ações que você planejou e entrevistas marcadas</div></div></div>
+        ${agenda.length?agenda.map(x=>`<a class="it" href="#/vaga/${x.r.id}">${x.d?dateBox(x.d,x.k==="i"||days(x.d)>=0):`<span class="date"><b>—</b><span>sem data</span></span>`}<div style="min-width:0"><div class="co-n">${esc(x.t)}</div><div class="co-r">${esc(x.s)}${x.late?` · <span class="late">atrasada</span>`:""}</div></div></a>`).join(""):`<div class="pad" style="padding-top:0"><p class="empty">Nada na agenda.</p><p class="fine" style="margin-top:4px">Peça ao agente, por exemplo: «lembrar de mandar follow-up para a Sur Global dia 10».</p></div>`}
+      </section>
+      <section class="card"><div class="ch"><div><h2>Respostas recentes</h2><div class="sub">Últimos 30 dias</div></div></div>
+        <div class="rows mini">${recent.length?recent.map(r=>`<a class="r" href="#/vaga/${r.id}">${coCell(r)}<div class="rt">${REPLY[r.frt]?`<div>${esc(REPLY[r.frt])}</div>`:""}${ago(days(r.lr))}</div></a>`).join(""):`<p class="empty pad" style="padding-top:0">Nenhuma resposta no período.</p>`}</div></section>
+      <section class="card pad"><h2>Funil da busca</h2><div class="bars" style="margin-top:16px">${fun.map(([l,n,of])=>`<div><div class="bar-t"><span>${l}</span><span>${n===of||l==="Vagas avaliadas"?n:`${n} de ${of}`}</span></div><div class="track"><i style="width:${of?n/of*100:0}%"></i></div></div>`).join("")}</div>
+        <p class="note">“Sem retorno há 21+ dias” é só uma marca: follow-up é sempre decisão sua. Taxas aparecem a partir de 10 candidaturas com 21+ dias.</p></section>
+    </div>
+  </div>`;
 }
 
 /* ---------- Oportunidades ---------- */
-const VIEWS=[["active","Em andamento",r=>applied(r)&&isActive(r)],["waiting","Aguardando resposta",r=>applied(r)&&!r.fr&&isActive(r)],["replied","Com resposta",r=>!!r.fr],["interview","Com entrevista",r=>r.niv>0],["applied","Candidaturas",applied],["discarded","Descartadas",r=>(STAGE[r.st]||[])[2]==="discarded"],["all","Todas",()=>true]];
-let FT=null;
+const VIEWS=[["all","Todas",()=>true],["active","Em andamento",r=>applied(r)&&isActive(r)],["waiting","Aguardando resposta",r=>applied(r)&&!r.fr&&isActive(r)],["replied","Com resposta",r=>!!r.fr],["interview","Com entrevista",r=>r.niv>0],["applied","Candidaturas",applied],["closed","Encerradas",r=>applied(r)&&!isActive(r)],["discarded","Descartadas",r=>(STAGE[r.st]||[])[2]==="discarded"]];
+let FT=null, LIMIT=100;
 function fullText(){if(FT)return FT;FT={};for(const r of IDX){const d=det(r.id),a=d.a||{};
   FT[r.id]={post:fold(d.post),ans:fold(d.ans.map(x=>x.question_verbatim+" "+x.answer_verbatim).join(" ")+" "+(a.key_answers_summary||"")),notes:fold([d.o.fit_notes,d.o.decision_rationale,d.o.display_summary,(d.o.display_points||[]).join(" "),d.o.notes,a.positioning_used,a.claims_emphasized,a.notes].join(" "))};}return FT;}
 function viewList(P){
-  document.title="Oportunidades · Busca de vagas";
-  const v=P.get("v")||"all",q=P.get("q")||"",f={tr:P.get("tr")||"",dec:P.get("dec")||"",pr:P.get("pr")||"",src:P.get("src")||"",m:P.get("m")||""},sort=P.get("s")||"recent";
+  head(`Busca de vagas / <b>Oportunidades</b>`,"Oportunidades");
+  const v=P.get("v")||"all",f={tr:P.get("tr")||"",dec:P.get("dec")||"",pr:P.get("pr")||"",src:P.get("src")||"",m:P.get("m")||""},sort=P.get("s")||"recent";
+  if(document.activeElement!==gq)gq.value=P.get("q")||"";
   const uniq=k=>[...new Set(IDX.map(r=>r[k]).filter(Boolean))].sort();
   const months=[...new Set(IDX.map(r=>(r.df||"").slice(0,7)).filter(Boolean))].sort().reverse();
-  const opt=(k,label,vals,map)=>`<select data-k="${k}" aria-label="${label}"><option value="">${label}</option>${vals.map(x=>`<option value="${esc(x)}"${f[k]===x?" selected":""}>${esc(map?map(x):x)}</option>`).join("")}</select>`;
-  view.innerHTML=`<div class="vh"><div><h1>Oportunidades</h1><div class="sub" id="cnt"></div></div></div>
-  <div class="controls"><label class="search">${icon("i-search")}<input id="q" type="search" value="${esc(q)}" placeholder="Empresa, cargo, ID, texto do anúncio ou das suas respostas" aria-label="Buscar"></label>
-  ${opt("tr","Trilha",uniq("tr"),x=>TRACK[x]||x)}${opt("dec","Decisão",uniq("dec"),x=>DEC[x]||x)}${opt("pr","Prioridade",uniq("pr"),x=>"Prioridade "+x)}${opt("src","Fonte",uniq("src"),x=>SRC[x]||x)}${opt("m","Mês encontrada",months,x=>{const[y,mm]=x.split("-");return MES[+mm-1]+" "+y;})}
-  <select data-k="s" aria-label="Ordenar"><option value="recent"${sort==="recent"?" selected":""}>Atividade mais recente</option><option value="silent"${sort==="silent"?" selected":""}>Mais tempo sem interação</option><option value="found"${sort==="found"?" selected":""}>Data em que vi</option><option value="pr"${sort==="pr"?" selected":""}>Prioridade</option><option value="co"${sort==="co"?" selected":""}>Empresa</option></select></div>
-  <div class="chips" id="chips">${VIEWS.map(([k,l,fn])=>`<button class="chip${k===v?" on":""}" data-v="${k}">${l}<span class="n">${IDX.filter(fn).length}</span></button>`).join("")}</div>
-  <div class="tbl" id="tbl"></div>`;
-  const upd=(k,val)=>{const N=new URLSearchParams(location.hash.split("?")[1]||"");val?N.set(k,val):N.delete(k);history.replaceState(null,"","#/vagas?"+N.toString());viewList(N);};
-  $("#q").addEventListener("input",e=>{clearTimeout(window._qt);window._qt=setTimeout(()=>{const N=new URLSearchParams(location.hash.split("?")[1]||"");e.target.value?N.set("q",e.target.value):N.delete("q");history.replaceState(null,"","#/vagas?"+N.toString());renderRows(N);},120);});
+  const opt=(k,label,vals,map)=>`<select data-k="${k}" aria-label="${label}" class="${f[k]?"set":""}"><option value="">${label}: todas</option>${vals.map(x=>`<option value="${esc(x)}"${f[k]===x?" selected":""}>${esc(map?map(x):x)}</option>`).join("")}</select>`;
+  const anyF=Object.values(f).some(Boolean);
+  view.innerHTML=`<section class="card"><div class="ch"><div><h2>${esc((VIEWS.find(x=>x[0]===v)||VIEWS[0])[1])}</h2><div class="sub" id="cnt"></div></div>
+    <div class="chips" id="chips">${VIEWS.map(([k,l,fn])=>`<button class="chip${k===v?" on":""}" data-v="${k}">${l}<span class="c">${IDX.filter(fn).length}</span></button>`).join("")}</div></div>
+  <div class="filters">${opt("tr","Trilha",uniq("tr"),x=>TRACK[x]||x)}${opt("dec","Decisão",uniq("dec"),x=>DEC[x]||x)}${opt("pr","Prioridade",uniq("pr"))}${opt("src","Fonte",uniq("src"),x=>SRC[x]||x)}${opt("m","Mês",months,x=>{const[y,mm]=x.split("-");return MES[+mm-1]+" "+y;})}
+    ${anyF?`<button class="clear" id="clr">Limpar filtros</button>`:""}<span class="sp"></span>
+    <select data-k="s" aria-label="Ordenar">${[["recent","Mais recentes"],["silent","Mais tempo sem interação"],["found","Data em que vi"],["pr","Prioridade"],["co","Empresa (A–Z)"]].map(([k,l])=>`<option value="${k}"${sort===k?" selected":""}>Ordenar: ${l}</option>`).join("")}</select></div>
+  <div class="thead"><span>Empresa e cargo</span><span>Etapa</span><span>Trilha</span><span>Vi em</span><span>Enviada</span><span>Última interação</span></div>
+  <div id="tbl"></div></section>`;
+  const upd=(k,val)=>{const N=new URLSearchParams(location.hash.split("?")[1]||"");val?N.set(k,val):N.delete(k);LIMIT=100;history.replaceState(null,"","#/vagas?"+N);viewList(N);};
   view.querySelectorAll("select").forEach(s=>s.addEventListener("change",()=>upd(s.dataset.k,s.value)));
   $("#chips").addEventListener("click",e=>{const b=e.target.closest(".chip");if(b)upd("v",b.dataset.v==="all"?"":b.dataset.v);});
+  const c=$("#clr");if(c)c.onclick=()=>{const N=new URLSearchParams();if(P.get("v"))N.set("v",P.get("v"));if(P.get("q"))N.set("q",P.get("q"));history.replaceState(null,"","#/vagas?"+N);viewList(N);};
   renderRows(P);
-  if(q){const i=$("#q");i.focus();i.setSelectionRange(q.length,q.length);}
 }
-let LIMIT=100;
 function renderRows(P){
   const v=P.get("v")||"all",q=fold(P.get("q")||"").trim(),sort=P.get("s")||"recent";
-  const vf=(VIEWS.find(x=>x[0]===v)||VIEWS[VIEWS.length-1])[2];
+  const vf=(VIEWS.find(x=>x[0]===v)||VIEWS[0])[2];
   let rows=IDX.filter(r=>vf(r)&&(!P.get("tr")||r.tr===P.get("tr"))&&(!P.get("dec")||r.dec===P.get("dec"))&&(!P.get("pr")||r.pr===P.get("pr"))&&(!P.get("src")||r.src===P.get("src"))&&(!P.get("m")||(r.df||"").startsWith(P.get("m"))));
   const hits={};
   if(q){const terms=q.split(" ").filter(Boolean);const ft=q.length>=3?fullText():null;
@@ -361,84 +593,108 @@ function renderRows(P){
       for(const[k,lab]of[["ans","nas suas respostas"],["post","no anúncio"],["notes","na análise"]])if(wr.every(re=>re.test(x[k]))){hits[r.id]=lab;return true;}return false;});}
   const key={recent:r=>r.li||r.dd||r.df||"",silent:r=>r.li?r.li:"9",found:r=>r.df||"",pr:r=>r.pr||"Z",co:r=>fold(r.co)}[sort];
   rows.sort((a,b)=>{const x=key(a),y=key(b);if(sort==="silent"||sort==="pr"||sort==="co")return x<y?-1:x>y?1:0;return x<y?1:x>y?-1:0;});
-  $("#cnt").textContent=`${rows.length} de ${IDX.length}`;
+  $("#cnt").innerHTML=`<b>${rows.length}</b> de ${IDX.length}${q?` · busca: “${esc(P.get("q"))}”`:""}`;
   const shown=rows.slice(0,LIMIT);
-  $("#tbl").innerHTML=`<div class="tr h"><span>Empresa e cargo</span><span>Etapa</span><span>Trilha</span><span>Vi em</span><span>Apliquei</span><span>Última interação</span></div>`
-   +(shown.length?shown.map(r=>`<a class="tr" href="#/vaga/${r.id}"><div><div class="t">${esc(r.co)}</div><div class="m">${esc(r.role)}${hits[r.id]?` <span class="hit">· encontrado ${hits[r.id]}</span>`:""}</div></div><div>${pill(r.st)}</div><div class="m">${esc(TRACK[r.tr]||r.tr)}${r.pr?" · "+esc(r.pr):""}</div><div class="m">${fds(r.df)}</div><div class="m">${r.ds?fds(r.ds):"—"}</div><div class="m">${r.app?esc(lastTxt(r)):"—"}</div></a>`).join(""):`<div class="tr"><span class="empty">Nada encontrado com esses critérios.</span></div>`)
+  $("#tbl").innerHTML=(shown.length?shown.map(r=>`<a class="trow" href="#/vaga/${r.id}"><div class="co">${avatar(r.co)}<div><div class="co-n">${esc(r.co)}</div><div class="co-r">${esc(r.role)}</div>${hits[r.id]?`<span class="hit">encontrado ${hits[r.id]}</span>`:""}</div></div>
+    <div class="c-st">${pill(r.st)}</div><div class="cell">${esc(TRK_S[r.tr]||r.tr)}<small>${r.pr?"Prioridade "+esc(r.pr):""}</small></div><div class="cell">${fds(r.df)}</div><div class="cell${r.ds?"":" dim"}">${r.ds?fds(r.ds):"—"}</div><div class="cell${r.app?"":" dim"}">${r.app?esc(lastTxt(r)):"—"}</div>
+    <div class="c-meta fine">${pill(r.st)}<span>${esc(TRK_S[r.tr]||r.tr)} · vi em ${fds(r.df)}${r.app?" · "+esc(lastTxt(r)):""}</span></div></a>`).join(""):`<div class="none"><b>Nada encontrado.</b><div class="fine" style="margin-top:4px">Tente outra palavra ou limpe os filtros.</div></div>`)
    +(rows.length>LIMIT?`<button class="more" id="more">Mostrar mais ${Math.min(100,rows.length-LIMIT)} de ${rows.length-LIMIT}</button>`:"");
   const m=$("#more");if(m)m.onclick=()=>{LIMIT+=100;renderRows(P);};
 }
 
-/* ---------- Detalhe ---------- */
-function mat(id){const m=META.mats[id];if(!m)return esc(id||"—");const kind=m.t==="RESUME"?`Currículo em ${m.lang==="PT"?"português":"inglês"}`:m.t==="COVER-LETTER"?"Carta":m.t==="PORTFOLIO"?"Portfólio":m.t;return `${esc(kind)} · <b>${esc(id)}</b><div class="fine">${esc(m.v||"")}</div>`;}
+/* ---------- Oportunidade ---------- */
+function matTxt(id){const m=META.mats[id];if(!m)return esc(id||"—");const kind=m.t==="RESUME"?`Currículo em ${m.lang==="PT"?"português":"inglês"}`:m.t==="COVER-LETTER"?"Carta":m.t==="PORTFOLIO"?"Portfólio":m.t;return `${esc(kind)} <span class="code">${esc(id)}</span>`;}
 const kv=rows=>`<dl class="kv">${rows.filter(x=>x&&x[1]!==undefined&&x[1]!==null&&x[1]!=="").map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join("")}</dl>`;
-const sec=(t,body)=>body?`<section class="sec"><h3>${t}</h3>${body}</section>`:"";
-const det_=(t,body)=>body?`<details class="ev"><summary>${t}</summary><div>${body}</div></details>`:"";
-const nask=v=>!v||/^NOT-ASKED/.test(v)?"":esc(v);
+const sec=(t,body,more)=>body?`<section class="sec"><h3>${t}${more||""}</h3>${body}</section>`:"";
+const fold_=(t,body)=>body?`<details class="fold"><summary>${t}</summary><div>${body}</div></details>`:"";
+const corrMark=(d,f)=>{const c=d.corr.find(x=>x.field===f);return c?`<span class="corr" title="Registrado originalmente como ${esc(c.old)}">corrigido</span>`:"";};
 const SAL=/(pretens[ãa]o salarial|desired salary|salário pretendido)/i;
-function viewDetail(id,tab){
-  const r=BY[id],d=det(id),o=d.o,a=d.a;
-  document.title=`${r.co} · Busca de vagas`;
-  const tabs=[["resumo","Resumo"]].concat(a?[["candidatura","Candidatura"],["processo","Processo"],["preparacao","Preparação"]]:[]).concat([["anuncio","Anúncio"],["registro","Registro"]]);
-  if(!tabs.some(t=>t[0]===tab))tab="resumo";
-  const n=days(r.li);
-  view.innerHTML=`<div class="crumb"><a href="#/vagas">← Oportunidades</a></div>
-  <div class="dh"><div><h1>${esc(r.co)}</h1><div class="role">${esc(o.role_title)}</div>
-  <div class="pills">${pill(r.st)}<span class="pill">${esc(TRACK[o.track]||o.track)}</span>${o.priority?`<span class="pill">Prioridade ${esc(o.priority)}</span>`:""}<span class="pill">${esc(SRC[o.source]||o.source)}</span></div></div>
-  ${/^https?:/.test(o.posting_url||"")?`<a class="btn" href="${esc(o.posting_url)}" target="_blank" rel="noopener">Abrir anúncio ↗</a>`:""}</div>
-  <div class="facts">${[["Vi em",fd(o.date_found)],["Decisão",(DEC[o.decision]||o.decision)+" · "+fds(o.decision_date)],a&&["Apliquei em",fd(a.date_submitted)],a&&["1ª resposta",r.fr?fd(r.fr):"ainda não"],a&&["Última interação",r.li?`${fds(r.li)} · ${ago(n)}`:"—"]].filter(Boolean).map(([k,v])=>`<div class="fact"><span>${k}</span><b>${esc(v)}</b></div>`).join("")}</div>
-  ${a&&a.next_action?`<div class="planned">${icon("i-flag")}<div><b>Ação planejada${a.next_action_date?" · "+fd(a.next_action_date):""}</b>${a.next_action_date&&days(a.next_action_date)>0?` <span class="late">(atrasada ${ago(days(a.next_action_date))})</span>`:""}<div>${esc(a.next_action)}</div></div></div>`:""}
-  <nav class="tabs">${tabs.map(([k,l])=>`<a href="#/vaga/${id}/${k}" class="${k===tab?"on":""}">${l}</a>`).join("")}</nav>
-  <div id="tab">${({resumo:tResumo,candidatura:tCand,processo:tProc,preparacao:tPrep,anuncio:tPost,registro:tAudit}[tab])(r,d)}</div>`;
-  view.querySelectorAll("[data-copy]").forEach(b=>b.onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText(b.dataset.copy).then(()=>{b.textContent="Copiado";});});
-}
-function tResumo(r,d){
-  const o=d.o,co=d.co||{};
-  const comp=o.comp_period==="NOT-POSTED"||!o.comp_posted_min?"Salário não informado":`${o.comp_currency} ${o.comp_posted_min}${o.comp_posted_max?"–"+o.comp_posted_max:""}/${PER[o.comp_period]||o.comp_period}`;
-  const known=v=>v&&!/^UNKNOWN/.test(v)&&v!=="NOT-REQUESTED";
-  return sec("Resumo",o.display_summary?`<p class="txt">${esc(o.display_summary)}</p>`:"")
-   +sec("Pontos de atenção",(o.display_points||[]).length?`<ul>${o.display_points.map(p=>`<li>${esc(p)}</li>`).join("")}</ul>`:"")
-   +sec("Condições do anúncio",[ARR[o.arrangement_posted]||o.arrangement_posted,LOC[o.location_rule]||o.location_rule,SEN[o.seniority_posted]||o.seniority_posted,comp].map(t=>`<span class="tag">${esc(t)}</span>`).join("")+(o.timezone_requirement&&o.timezone_requirement!=="NOT-POSTED"?`<p class="sub">${esc(o.timezone_requirement)}</p>`:""))
-   +sec("Decisão",`<p><b>${esc(DEC[o.decision]||o.decision)}</b> · ${fd(o.decision_date)}${o.gate_result==="FAIL"?` · <span class="late">reprovada no critério ${esc(o.gate_failed_reason)}</span>`:""}</p>${o.decision_rationale?`<p class="txt">${esc(o.decision_rationale)}</p>`:""}`)
-   +sec("Análise de fit",o.fit_notes?`<p class="txt">${esc(o.fit_notes)}</p>`:"")
-   +sec("Empresa",kv([["Nome",esc(co.name||o.company_name)],known(co.website)&&["Site",linkify(co.website)],known(co.country)&&["País",esc(co.country)],known(co.type)&&["Tipo",esc(co.type)],known(co.size)&&["Porte",esc(co.size)]])
-       +(d.others.length?`<p class="sub" style="margin-top:8px">Outras vagas desta empresa: ${d.others.map(x=>`<a href="#/vaga/${x}">${esc(BY[x].role)} (${fds(BY[x].df)})</a>`).join(" · ")}</p>`:"")
-       +(d.ct.length?`<p class="sub">Contatos: ${d.ct.map(c=>esc(c.name+(c.role_title?" · "+c.role_title:""))).join(", ")}</p>`:"")
-       +det_("Pesquisa registrada sobre a empresa",co.research_notes?`<p class="txt">${esc(co.research_notes)}</p>`:""));
-}
-function corrMark(d,f){const c=d.corr.find(x=>x.field===f);return c?`<span class="corr" title="Valor original: ${esc(c.old)} · ${esc(c.ev)}">corrigido</span>`:"";}
 function salFull(d){
   const a=d.a,sal=d.ans.filter(x=>/(salary|salári|pretens|remunera)/i.test(x.question_verbatim)&&String(x.answer_verbatim).trim());
-  let salT=esc(salary(a));
-  if(!a.salary_asked_value&&sal.length)salT+=" · declarado depois: "+sal.map(x=>`${esc(x.answer_verbatim)} (${esc(x.question_verbatim)}, ${fd(x.date)})`).join("; ");
-  else if(!a.salary_asked_value&&[a.notes,...d.ev.filter(e=>e.k==="p"&&e.event_type!=="SUBMITTED").map(e=>e.summary+" "+e.detail_verbatim)].some(t=>SAL.test(t||"")))salT+=" · há pretensão declarada depois, só em texto (veja Processo)";
-  return salT;
+  let t=!a.salary_asked_value?(a.salary_asked_period==="NOT-ASKED"?"Não perguntaram no envio":"Não informado no envio"):`${esc(a.salary_asked_currency)} ${esc(a.salary_asked_value)}${PER[a.salary_asked_period]?"/"+PER[a.salary_asked_period]:""}`;
+  if(!a.salary_asked_value&&sal.length)t+=`<small>Declarado depois: ${sal.map(x=>`${esc(x.answer_verbatim)} (${fds(x.date)})`).join("; ")}</small>`;
+  else if(!a.salary_asked_value&&[a.notes,...d.ev.filter(e=>e.k==="p"&&e.event_type!=="SUBMITTED").map(e=>e.summary+" "+e.detail_verbatim)].some(x=>SAL.test(x||"")))t+=`<small>Houve pretensão declarada depois, em texto: veja o Histórico</small>`;
+  return t;
+}
+function stageText(r,d){
+  const o=d.o,a=d.a,n=days(r.li);
+  if(a){const s=STAGE[r.st]||[];if(s[2]==="closed")return [s[0]+(a.outcome_date?` em ${fd(a.outcome_date)}`:""),a.outcome_reason||""];
+    return [s[0],`Candidatura enviada ${ago(days(a.date_submitted))} por ${CHAN[a.channel]||a.channel}${r.fr?` · primeira resposta em ${fds(r.fr)}`:" · ainda sem resposta"}${r.li&&r.li.slice(0,10)!==a.date_submitted?` · última interação ${ago(n)}`:""}.`];}
+  if(r.st==="discarded")return ["Descartada",`Decisão de ${fd(o.decision_date)}: ${DEC[o.decision]||o.decision}${o.gate_result==="FAIL"?" — não passou nos critérios de busca":""}.`];
+  if(r.st==="toapply")return ["Decidi aplicar",`Decisão de ${fd(o.decision_date)}; candidatura ainda não enviada.`];
+  return [(STAGE[r.st]||[r.st])[0],`Decisão de ${fd(o.decision_date)}: ${DEC[o.decision]||o.decision}.`];
+}
+function viewDetail(id,tab){
+  const r=BY[id],d=det(id),o=d.o,a=d.a;
+  head(`<a href="#/vagas">Oportunidades</a> / <b>${esc(r.co)}</b>`,r.co);
+  const tabs=[["visao","Visão geral"]].concat(a?[["candidatura","Candidatura"]]:[]).concat([["historico","Histórico"]]).concat(a?[["preparacao","Preparação"]]:[]).concat([["anuncio","Anúncio"],["tecnico","Dados técnicos"]]);
+  if(!tabs.some(t=>t[0]===tab))tab="visao";
+  view.innerHTML=`<section class="card dhead"><div class="co" style="align-items:flex-start;gap:16px">${avatar(r.co)}<div><h2>${esc(r.co)}</h2><div class="role">${esc(o.role_title)}</div>
+    <div class="pills">${pill(r.st)}<span class="tag" style="margin:0">${esc(TRACK[o.track]||o.track)}</span>${o.priority?`<span class="tag" style="margin:0">Prioridade ${esc(o.priority)}</span>`:""}</div></div></div>
+    <div class="acts">${/^https?:/.test(o.posting_url||"")?`<a class="btn line" href="${esc(o.posting_url)}" target="_blank" rel="noopener">${icon("i-ext")}Anúncio original</a>`:""}${a?`<a class="btn dark" href="#/vaga/${id}/preparacao">${icon("i-spark")}Preparar entrevista</a>`:""}</div></section>
+  <div class="dgrid"><section class="card"><nav class="tabs">${tabs.map(([k,l])=>`<a href="#/vaga/${id}/${k}" class="${k===tab?"on":""}${k==="tecnico"?" tech":""}">${l}</a>`).join("")}</nav>
+    <div class="tbody">${({visao:tVisao,candidatura:tCand,historico:tHist,preparacao:tPrep,anuncio:tPost,tecnico:tTech}[tab])(r,d)}</div></section>
+  <aside class="rail">${rail(r,d)}</aside></div>`;
+  view.querySelectorAll("[data-copy]").forEach(b=>b.onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText(b.dataset.copy).then(()=>{b.textContent="Copiado";});});
+}
+function rail(r,d){
+  const o=d.o,a=d.a,co=d.co||{};
+  const comp=o.comp_period==="NOT-POSTED"||!o.comp_posted_min?"Salário não informado":`${o.comp_currency} ${o.comp_posted_min}${o.comp_posted_max?"–"+o.comp_posted_max:""}/${PER[o.comp_period]||o.comp_period}`;
+  const row=(k,v,s)=>v?`<dt>${k}</dt><dd>${v}${s?`<small>${s}</small>`:""}</dd>`:"";
+  return `<section class="card"><div class="ch"><h2>Ficha</h2></div><dl class="rk">
+    ${row("Vi em",fd(o.date_found),esc(SRC[o.source]||o.source))}
+    ${row("Decisão",esc(DEC[o.decision]||o.decision),fd(o.decision_date))}
+    ${a?row("Enviada",fd(a.date_submitted),"por "+esc(CHAN[a.channel]||a.channel)):""}
+    ${a?row("1ª resposta",r.fr?fd(r.fr):"ainda não",r.frt?esc(REPLY[r.frt]||""):""):""}
+    ${a&&r.li?row("Última interação",fds(r.li),ago(days(r.li))):""}
+    ${a&&a.next_action?row("Ação planejada",esc(a.next_action),a.next_action_date?fd(a.next_action_date):""):""}</dl></section>
+  <section class="card"><div class="ch"><h2>Condições do anúncio</h2></div><div class="rb">${[ARR[o.arrangement_posted]||o.arrangement_posted,LOC[o.location_rule]||o.location_rule,SEN[o.seniority_posted]||o.seniority_posted,comp].map(t=>`<span class="tag">${esc(t)}</span>`).join("")}${known(o.timezone_requirement)?`<p class="fine" style="margin-top:4px">${esc(o.timezone_requirement)}</p>`:""}</div></section>
+  <section class="card"><div class="ch"><h2>Empresa</h2></div><div class="rb">
+    <b>${esc(co.name||o.company_name)}</b>${[known(co.country)&&co.country,known(co.size)&&co.size].filter(Boolean).length?` <span class="fine">· ${esc([known(co.country)&&co.country,known(co.size)&&co.size].filter(Boolean).join(" · "))}</span>`:""}
+    ${known(co.type)?`<p class="sub" style="margin-top:4px">${clamp(co.type,140)}</p>`:""}${known(co.website)?`<p style="margin-top:6px">${linkify(co.website)}</p>`:""}
+    ${d.others.length?`<p class="lab" style="margin-top:14px">Outras vagas desta empresa</p>${d.others.map(x=>`<p style="margin-top:4px"><a href="#/vaga/${x}">${esc(BY[x].role)}</a> <span class="fine">${fds(BY[x].df)}</span></p>`).join("")}`:""}
+    ${d.ct.length?`<p class="lab" style="margin-top:14px">Contatos</p>${d.ct.map(c=>`<p style="margin-top:4px">${esc(c.name)}${c.role_title?` <span class="fine">${esc(c.role_title)}</span>`:""}</p>`).join("")}`:""}
+    ${known(co.research_notes)?`<p class="lab" style="margin-top:14px">Pesquisa registrada</p><div class="sub">${clamp(co.research_notes,160)}</div>`:""}</div></section>`;
+}
+function hist(d){
+  const o=d.o,a=d.a,items=[{ts:o.date_found,l:"Vaga encontrada",x:`${SRC[o.source]||o.source}${o.source_detail?" · "+o.source_detail:""}`,c:"",ic:"i-eye"},{ts:o.decision_date+" ",l:"Decisão: "+(DEC[o.decision]||o.decision),x:"",c:"",ic:"i-check"}];
+  for(const e of d.ev.filter(e=>e.k==="p")){const it={ts:e.timestamp,l:EVT[e.event_type]||e.event_type,c:"p",ic:"i-dot",rec:e.summary};
+    if(e.event_type==="SUBMITTED"&&a){it.c="p big";it.ic="i-send";it.x=`Por ${CHAN[a.channel]||a.channel} · ${matTxt(a.resume_version_id).replace(/<[^>]+>/g," ").replace(/\s+/g," ").trim()}`;it.q=a.channel==="EMAIL"?a.key_answers_summary:e.detail_verbatim;}
+    else if(e.event_type==="REPLY-RECEIVED"){it.ic="i-msg";it.c="p big";it.q=e.detail_verbatim;if(!e.detail_verbatim){it.x=e.summary;it.rec="";}}
+    else if(e.event_type==="STATUS-CHANGE"&&(e.old_value||e.new_value)){it.x=`${APP_ST[e.old_value]||e.old_value} → ${APP_ST[e.new_value]||e.new_value}`;}
+    else if(e.event_type==="FOLLOW-UP-SENT"){it.ic="i-send";it.q=e.detail_verbatim;if(!e.detail_verbatim){it.x=e.summary;it.rec="";}}
+    else{it.x=e.summary;it.rec="";it.q=e.detail_verbatim;}
+    items.push(it);}
+  for(const x of d.iv)items.push({ts:x.scheduled_datetime_brt,l:`Entrevista · ${ROUND[x.round]||x.round}`,x:[x.format,x.language,x.outcome&&x.outcome!=="PENDING"?"resultado: "+x.outcome:"pendente"].filter(Boolean).join(" · "),q:[x.what_i_said_summary&&"O que eu disse: "+x.what_i_said_summary,x.commitments_made&&"Compromissos: "+x.commitments_made].filter(Boolean).join("\n\n"),c:"p big",ic:"i-cal"});
+  for(const x of d.out){items.push({ts:x.date,l:`Mensagem enviada · ${x.channel}`,x:x.contact_name||"",q:x.message_sent,c:"p",ic:"i-send"});if(x.response_date)items.push({ts:x.response_date,l:"Resposta à mensagem",x:x.response_summary,c:"p",ic:"i-msg"});}
+  return items.filter(x=>x.ts&&x.ts.trim()).sort((a,b)=>a.ts<b.ts?-1:1);
+}
+const tlItem=(x,full)=>`<li class="${x.c}"><span class="dot">${icon(x.ic)}</span><div><div class="d">${fd(x.ts)}${x.ts.length>11?" · "+esc(x.ts.slice(11,16)):""}</div><div class="l">${esc(x.l)}</div>${x.x?`<div class="x">${full?clamp(x.x,260):esc(String(x.x).slice(0,140))+(String(x.x).length>140?"…":"")}</div>`:""}${full&&x.q?`<div class="q">${clamp(x.q,420)}</div>`:""}${full&&x.rec?rnote(x.rec):""}</div></li>`;
+function tVisao(r,d){
+  const o=d.o,a=d.a,[st,stx]=stageText(r,d);
+  const H=hist(d),last=H.slice(-3).reverse();
+  return `<div class="state${a&&a.next_action?" plan":""}"><span class="ico">${icon(a&&a.next_action?"i-flag":isActive(r)?"i-clock":"i-check")}</span><div><b>${esc(st)}</b><p class="sub" style="margin-top:2px">${esc(stx)}</p>
+      ${a&&a.next_action?`<p style="margin-top:8px"><b style="font-size:13.5px">Ação planejada${a.next_action_date?" · "+fd(a.next_action_date):""}:</b> ${esc(a.next_action)}${a.next_action_date&&days(a.next_action_date)>0?` <span class="late">(atrasada)</span>`:""}</p>`:a&&isActive(r)?`<p class="fine" style="margin-top:6px">Nenhuma ação planejada.</p>`:""}</div></div>
+   ${sec("Em resumo",o.display_summary?`<p class="prose">${esc(o.display_summary)}</p>`:"")}
+   ${sec("Para lembrar",(o.display_points||[]).length?`<ul class="pts prose">${o.display_points.map(p=>`<li>${esc(p)}</li>`).join("")}</ul>`:"")}
+   ${a?sec("O que enviei",`<div class="facts"><div><span>Canal</span><b>${esc(cap(CHAN[a.channel]||a.channel))}</b></div><div><span>Currículo</span><b>${esc(a.resume_version_id)}</b>${corrMark(d,"resume_version_id")}<small>${(META.mats[a.resume_version_id]||{}).lang==="PT"?"português":"inglês"}</small></div><div><span>Salário</span><b>${salFull(d)}</b></div><div><span>Formulário</span><b>${d.ans.length?d.ans.length+" resposta(s)":"sem perguntas"}</b></div></div>`,`<a class="link" href="#/vaga/${r.id}/candidatura">Ver candidatura completa →</a>`):""}
+   ${sec("Últimos acontecimentos",`<ol class="tl compact">${last.map(x=>tlItem(x,false)).join("")}</ol>`,`<a class="link" href="#/vaga/${r.id}/historico">Histórico completo →</a>`)}
+   ${sec("Decisão e análise",`<p><b>${esc(DEC[o.decision]||o.decision)}</b> <span class="fine">· ${fd(o.decision_date)}</span></p>${o.decision_rationale?`<div class="prose sub" style="margin-top:6px;color:var(--ink-2)">${clamp(o.decision_rationale,300)}</div>`:""}${o.fit_notes?`<div style="margin-top:12px">${fold_("Análise de fit completa",`<div class="prose">${linkify(o.fit_notes)}</div>`)}</div>`:""}`)}`;
 }
 function tCand(r,d){
-  const a=d.a;if(!a)return"";const salT=salFull(d);
+  const a=d.a;if(!a)return"";
   const cl=d.ans.find(x=>/^\s*(cover letter|carta)/i.test(x.question_verbatim));
   const later=d.ans.some(x=>x.date&&x.date!==a.date_submitted);let cur=null;
   const ansH=d.ans.map(x=>{let g="";if(later&&x.date!==cur){cur=x.date;g=`<div class="grp">${x.date===a.date_submitted?"No envio":"Formulário posterior"} · ${fd(x.date)}</div>`;}
-    return g+`<div><div class="q">${esc(x.question_verbatim)}</div><div class="a">${esc(x.answer_verbatim)||'<span class="fine">(em branco)</span>'}</div>${x.notes&&x.notes!=="Y/N field."?`<div class="nt">${esc(x.notes)}</div>`:""}</div>`;}).join("");
-  return sec("Como enviei",kv([["Data",fd(a.date_submitted)],["Canal",esc(CHAN[a.channel]||a.channel)+corrMark(d,"channel")],["Currículo",mat(a.resume_version_id)+corrMark(d,"resume_version_id")],["Carta",a.cover_letter_id?mat(a.cover_letter_id):cl?"Enviada no campo do formulário (veja as respostas)":"Não enviada"],["Portfólio",a.portfolio_version==="POR-001"?'<a href="https://mathewsportfolio.framer.website/" target="_blank" rel="noopener">link canônico</a>':mat(a.portfolio_version)],["Salário informado",salT+corrMark(d,"salary_asked_value")]]))
-   +sec("O que declarei sobre mim",kv([["Nível apresentado",esc(SEN[a.seniority_presented]||a.seniority_presented)],["Posicionamento",nask(a.positioning_used)],["O que enfatizei",nask(a.claims_emphasized)],["Condições",nask(a.conditions_declared)],["Disponibilidade",nask(a.availability_declared)],["Inglês",nask(a.english_level_declared)]]))
-   +(a.channel==="EMAIL"?sec("Mensagem enviada",`<div class="v">${linkify(a.key_answers_summary)}</div>`):"")
-   +sec(`Respostas do formulário <span class="sub">(${d.ans.length})</span>`,d.ans.length?`<div class="qa">${ansH}</div>`:`<p class="empty">Nenhuma pergunta de formulário registrada.</p>`)
-   +(a.channel!=="EMAIL"?det_("Resumo das respostas, como registrado",a.key_answers_summary?`<p class="txt">${linkify(a.key_answers_summary)}</p>`:""):"")
-   +det_("Comprovação do envio",a.submission_proof?`<p class="txt">${esc(a.submission_proof)}</p>`:"");
+    return g+`<div><div class="qq">${esc(x.question_verbatim)}</div><div class="aa">${esc(x.answer_verbatim)||'<span class="fine">(em branco)</span>'}</div>${x.notes&&x.notes!=="Y/N field."?rnote(x.notes):""}</div>`;}).join("");
+  return `<div class="blk"><span class="lab">Envio</span>${kv([["Data",fd(a.date_submitted)],["Canal",esc(cap(CHAN[a.channel]||a.channel))+corrMark(d,"channel")],["Currículo",matTxt(a.resume_version_id)+corrMark(d,"resume_version_id")+`<div class="fine">${esc((META.mats[a.resume_version_id]||{}).v||"")}</div>`],["Carta",a.cover_letter_id?matTxt(a.cover_letter_id):cl?"No campo do formulário (veja as respostas)":"Não enviada"],["Portfólio",a.portfolio_version==="POR-001"?'<a href="https://mathewsportfolio.framer.website/" target="_blank" rel="noopener">mathewsportfolio.framer.website</a>':matTxt(a.portfolio_version)],["Salário",salFull(d).replace("<small>",'<div class="fine">').replace("</small>","</div>")+corrMark(d,"salary_asked_value")]])}</div>
+   <div class="blk"><span class="lab">Como me apresentei</span>${kv([["Nível",esc(SEN[a.seniority_presented]||a.seniority_presented)],["Posicionamento",nask(a.positioning_used)&&clamp(a.positioning_used,260)],["Destaques",nask(a.claims_emphasized)&&clamp(a.claims_emphasized,260)],["Condições",esc(nask(a.conditions_declared))],["Disponibilidade",esc(nask(a.availability_declared))],["Inglês",esc(nask(a.english_level_declared))]])}</div>
+   ${a.channel==="EMAIL"?`<div class="blk"><span class="lab">Mensagem enviada</span><div class="q">${linkify(a.key_answers_summary)}</div></div>`:""}
+   ${d.ans.length?`<div class="blk"><span class="lab">Respostas do formulário · ${d.ans.length}</span><div class="qa">${ansH}</div></div>`:a.channel!=="EMAIL"?`<div class="blk"><span class="lab">Respostas do formulário</span><p class="empty">Nenhuma pergunta registrada.</p></div>`:""}
+   <div style="margin-top:14px">${a.channel!=="EMAIL"?fold_("Resumo das respostas, como registrado",a.key_answers_summary?`<p class="prose">${linkify(a.key_answers_summary)}</p>`:""):""}${fold_("Comprovação do envio",a.submission_proof?`<p class="prose">${esc(a.submission_proof)}</p>`:"")}</div>`;
 }
-function timeline(r,d){
-  const o=d.o,items=[{ts:o.date_found,l:"Vaga encontrada",s:`${SRC[o.source]||o.source}`,c:"ms"},{ts:o.decision_date+" ",l:"Decisão: "+(DEC[o.decision]||o.decision),s:"",c:"ms"}];
-  for(const e of d.ev.filter(e=>e.k==="p")){let v=e.detail_verbatim||"";if(e.event_type==="SUBMITTED"&&d.a&&d.a.channel==="EMAIL")v=d.a.key_answers_summary;items.push({ts:e.timestamp,l:EVT[e.event_type]||e.event_type,s:e.summary,v,c:"p"});}
-  for(const x of d.iv)items.push({ts:x.scheduled_datetime_brt,l:`Entrevista · ${ROUND[x.round]||x.round}`,s:[x.format,x.language,x.outcome&&x.outcome!=="PENDING"?"resultado: "+x.outcome:"pendente"].filter(Boolean).join(" · "),v:[x.what_i_said_summary&&"O que eu disse: "+x.what_i_said_summary,x.commitments_made&&"Compromissos: "+x.commitments_made,x.red_flags&&"Alertas: "+x.red_flags].filter(Boolean).join("\n\n"),c:"p"});
-  for(const x of d.out)items.push({ts:x.date,l:`Mensagem enviada · ${x.channel}`,s:x.contact_name||"",v:x.message_sent,c:"p"},...(x.response_date?[{ts:x.response_date,l:"Resposta à mensagem",s:x.response_summary,c:"p"}]:[]));
-  return items.filter(x=>x.ts&&x.ts.trim()).sort((a,b)=>a.ts<b.ts?-1:1);
-}
-function tProc(r,d){
-  const a=d.a,items=timeline(r,d);
-  return sec("Etapa atual",`<p>${pill(r.st)} ${r.li?`<span class="sub">· última interação ${esc(fd(r.li))} (${ago(days(r.li))})</span>`:""}</p>`)
-   +sec("Linha do tempo",`<ol class="tl">${items.map(x=>`<li class="${x.c}"><div class="d">${fd(x.ts)}${x.ts.length>11?" · "+esc(x.ts.slice(11,16)):""}</div><div class="l">${esc(x.l)}</div>${x.s?`<div class="s">${linkify(x.s)}</div>`:""}${x.v?det_("Ver texto original",`<div class="v">${linkify(x.v)}</div>`):""}</li>`).join("")}</ol>`)
-   +`<p class="fine">Correções, avaliações e eventos técnicos ficam na aba Registro.</p>`;
+function tHist(r,d){
+  return `<ol class="tl">${hist(d).map(x=>tlItem(x,true)).join("")}</ol><p class="fine">Mostra o que aconteceu na vaga e na comunicação com a empresa. Avaliações, correções e eventos de controle ficam em Dados técnicos.</p>`;
 }
 const ASK=["Modelo de contrato: contractor/PJ, CLT ou EOR?","Exclusividade: posso manter outro contrato?","Horas por semana e flexibilidade de horário","Fuso e horário de sobreposição esperado","Como funciona o pagamento para quem está no Brasil (moeda, nota fiscal PJ, plataforma)"];
 function tPrep(r,d){
@@ -446,55 +702,66 @@ function tPrep(r,d){
   const caveats=d.ans.filter(x=>x.notes&&/(FLAG|ressalva|caveat|against|overclaim|chose|assum)/i.test(x.notes));
   const req=requirements(d.post);
   const ask=`Prepare a entrevista da oportunidade ${r.id} (${r.co} · ${o.role_title}). Use o contexto completo: python3 tools/brief.py ${r.id}`;
-  return `<div class="ai"><b>Preparar com IA</b><p class="sub" style="margin:4px 0 8px">O contexto completo — anúncio, candidatura, respostas, currículo enviado, claims, ressalvas e histórico — é montado sob demanda no repositório privado. Peça ao agente:</p><p><code>${esc(ask)}</code> <button class="btn" data-copy="${esc(ask)}">Copiar pedido</button></p><p class="fine">Serve para simular entrevista (técnica, comportamental, com o gestor), conversar sobre a vaga ou preparar perguntas. Nada do que a IA concluir é gravado no sistema.</p></div>`
-   +sec("Para lembrar",(o.display_points||[]).length?`<ul>${o.display_points.map(p=>`<li>${esc(p)}</li>`).join("")}</ul>`:"")
-   +sec("Cuidado: não contradizer",(caveats.length||d.corr.length)?`<div class="qa">${caveats.map(x=>`<div><div class="q">${esc(x.question_verbatim)}</div><div class="a">Você respondeu: <b>${esc(x.answer_verbatim)}</b></div><div class="nt">${esc(x.notes)}</div></div>`).join("")}${d.corr.map(c=>`<div><div class="q">Correção registrada</div><div class="a">${esc(c.field)}: o valor real é <b>${esc(c.new)}</b> (não ${esc(c.old)})</div></div>`).join("")}</div>`:`<p class="empty">Nenhuma ressalva registrada nas respostas.</p>`)
-   +sec("O que você declarou",kv([["Nível apresentado",esc(SEN[a.seniority_presented]||a.seniority_presented)],["Posicionamento",nask(a.positioning_used)],["O que enfatizou",nask(a.claims_emphasized)],["Salário",salFull(d)],["Inglês",nask(a.english_level_declared)]]))
-   +sec("Lacunas e análise de fit",o.fit_notes?`<p class="txt">${esc(o.fit_notes)}</p>`:"")
-   +sec("O que o anúncio pede",req.length?req.map(g=>`<div class="grp" style="margin-top:8px">${esc(g.h)}</div><ul>${g.items.map(i=>`<li>${linkify(i)}</li>`).join("")}</ul>`).join("")+`<p class="fine">Trechos copiados do anúncio, sem interpretação. Texto completo na aba Anúncio.</p>`:`<p class="empty">Veja o texto completo na aba Anúncio.</p>`)
-   +sec("Entrevistas",d.iv.length?d.iv.map(x=>kv([["Rodada",esc(ROUND[x.round]||x.round)],["Quando",esc(x.scheduled_datetime_brt)],["Resultado",esc(x.outcome)],["Compromissos assumidos",esc(x.commitments_made)],["Notas de preparação",esc(x.prep_notes)]])).join("<hr>"):`<p class="empty">Nenhuma entrevista registrada ainda.</p>`)
-   +sec("Perguntas para fazer a eles",`<ul>${ASK.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`);
+  return `<div class="ai"><b>Preparar com IA</b><p class="sub" style="margin-top:4px;color:var(--ink-2)">O agente monta o contexto completo — anúncio, candidatura, respostas, currículo enviado, ressalvas e histórico — e conduz simulações de entrevista técnica, comportamental ou com o gestor. Nada do que a IA concluir é gravado.</p>
+     <div class="ask"><code>${esc(ask)}</code><button class="btn dark" data-copy="${esc(ask)}">Copiar pedido</button></div></div>
+   ${(caveats.length||d.corr.length)?sec("Cuidado para não se contradizer",`<div class="qa warnbox">${caveats.map(x=>`<div><div class="qq">${esc(x.question_verbatim)}</div><div class="aa">Você respondeu: <b>${esc(x.answer_verbatim)}</b></div><div class="nn">${esc(x.notes)}</div></div>`).join("")}${d.corr.map(c=>`<div><div class="qq">Correção registrada</div><div class="aa">${esc(c.field==="resume_version_id"?"Currículo enviado":c.field)}: na verdade foi <b>${esc(c.new)}</b> (registrado como ${esc(c.old)})</div></div>`).join("")}</div>`):""}
+   ${sec("Para lembrar",(o.display_points||[]).length?`<ul class="pts prose">${o.display_points.map(p=>`<li>${esc(p)}</li>`).join("")}</ul>`:"")}
+   ${sec("O que você declarou",`<div class="blk">${kv([["Nível",esc(SEN[a.seniority_presented]||a.seniority_presented)],["Posicionamento",nask(a.positioning_used)&&clamp(a.positioning_used,200)],["Destaques",nask(a.claims_emphasized)&&clamp(a.claims_emphasized,200)],["Salário",salFull(d).replace("<small>",'<div class="fine">').replace("</small>","</div>")],["Inglês",esc(nask(a.english_level_declared))]])}</div>`)}
+   ${sec("O que o anúncio pede",req.length?`<div class="blk">${req.map(g=>`<div class="grp" style="margin:0 0 6px">${esc(g.h)}</div><ul class="pts" style="margin-bottom:12px">${g.items.map(i=>`<li>${linkify(i)}</li>`).join("")}</ul>`).join("")}<p class="fine">Trechos copiados do anúncio, sem interpretação.</p></div>`:`<p class="empty">Veja o texto completo na aba Anúncio.</p>`)}
+   ${sec("Lacunas e análise de fit",o.fit_notes?fold_("Ler análise completa",`<div class="prose">${linkify(o.fit_notes)}</div>`):"")}
+   ${sec("Entrevistas",d.iv.length?d.iv.map(x=>`<div class="blk">${kv([["Rodada",esc(ROUND[x.round]||x.round)],["Quando",esc(x.scheduled_datetime_brt)],["Resultado",esc(x.outcome)],["Compromissos",esc(x.commitments_made)],["Preparação",esc(x.prep_notes)]])}</div>`).join(""):`<p class="empty">Nenhuma entrevista registrada ainda.</p>`)}
+   ${sec("Perguntas para fazer a eles",`<ul class="pts">${ASK.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`)}`;
 }
 function tPost(r,d){
   const o=d.o;
-  if(d.post)return `<div class="card post">${formatPosting(d.post)}</div>`;
-  return `<p class="empty">${o.posting_snapshot==="NOT-STORED"?"Anúncio não guardado: vaga descartada (o registro guarda o link e o motivo).":"Texto do anúncio não encontrado."}</p>${/^https?:/.test(o.posting_url||"")?`<p><a href="${esc(o.posting_url)}" target="_blank" rel="noopener">Abrir o link original ↗</a></p>`:""}`;
+  if(d.post)return `<div class="post">${formatPosting(d.post)}</div>`;
+  return `<p class="empty">${o.posting_snapshot==="NOT-STORED"?"Anúncio não guardado: vaga descartada (o registro guarda o link e o motivo).":"Texto do anúncio não encontrado."}</p>${/^https?:/.test(o.posting_url||"")?`<p style="margin-top:8px"><a href="${esc(o.posting_url)}" target="_blank" rel="noopener">Abrir o link original ↗</a></p>`:""}`;
 }
-function tAudit(r,d){
+function evBlock(e){return `<div><div class="evh"><b>${esc(EVT[e.event_type]||e.event_type)}</b><span>${fd(e.timestamp)} ${esc(e.timestamp.slice(11,16))}</span><span class="code">${esc(e.event_id)}</span></div><div class="x">${clamp(e.summary,240)}</div>${e.detail_verbatim?`<div class="q" style="margin-top:6px">${clamp(e.detail_verbatim,200)}</div>`:""}${e.old_value||e.new_value?`<div style="margin-top:6px">${ba(e)}</div>`:""}</div>`;}
+function tTech(r,d){
   const o=d.o,a=d.a,aud=d.ev.filter(e=>e.k==="a");
-  const evRow=e=>`<div class="row"><span class="id">${esc(e.event_id)} · ${esc(e.timestamp)} · ${esc(e.entity_id)}</span> <b>${esc(EVT[e.event_type]||e.event_type)}</b><div>${linkify(e.summary)}</div>${e.detail_verbatim?`<div class="v">${linkify(e.detail_verbatim)}</div>`:""}${e.old_value||e.new_value?`<div class="fine">antes: ${esc(e.old_value)} → depois: ${esc(e.new_value)}</div>`:""}</div>`;
-  return `<div class="audit">`+sec("Identificadores",kv([["Oportunidade",`<span class="id">${esc(o.opportunity_id)}</span>`],a&&["Candidatura",`<span class="id">${esc(a.application_id)}</span>`],["Empresa",`<span class="id">${esc(o.company_id)}</span>`],["Anúncio",`<span class="id">${esc(o.posting_snapshot)}</span>`],["Classificação",esc(`${o.track} · ${o.intended_outcome} · gate ${o.gate_result}${o.gate_failed_reason&&o.gate_failed_reason!=="—"?" ("+o.gate_failed_reason+")":""} · compat. ${o.compatibility_verdict} · ${o.status}`)],["Busca registrada",esc(o.search_method)]]))
-   +sec("Correções aplicadas à candidatura",d.corr.length?d.corr.map(c=>`<div class="row">${esc(c.field)}: <s>${esc(c.old)}</s> → <b>${esc(c.new)}</b> <span class="id">${esc(c.ev)} · ${esc(c.ts)}</span></div>`).join(""):"")
-   +sec("Notas brutas do registro",[o.notes&&`<div class="row"><b>Oportunidade</b><p class="txt">${linkify(o.notes)}</p></div>`,a&&a.notes&&`<div class="row"><b>Candidatura</b><p class="txt">${linkify(a.notes)}</p></div>`].filter(Boolean).join(""))
-   +sec(`Eventos de avaliação, correção e sistema <span class="sub">(${aud.length})</span>`,aud.map(evRow).join(""))
-   +`</div>`;
+  const GATE={"PASS":"Passou","FAIL":"Não passou"};
+  const c=(label,code)=>`${label} <span class="code">${esc(code)}</span>`;
+  return `<p class="techintro">Informações de controle do registro: identificadores, códigos de classificação, correções e eventos de auditoria. Úteis para conferir ou corrigir dados — não são necessárias no uso diário.</p>
+   <div class="blk"><span class="lab">Identificação</span>${kv([["Oportunidade",`<span class="code">${esc(o.opportunity_id)}</span>`],a&&["Candidatura",`<span class="code">${esc(a.application_id)}</span>`],["Empresa",`<span class="code">${esc(o.company_id)}</span>`],["Arquivo do anúncio",`<span class="code">${esc(o.posting_snapshot)}</span>`]])}</div>
+   <div class="blk"><span class="lab">Classificação</span>${kv([["Trilha",c(TRACK[o.track]||o.track,o.track)],["Objetivo",`<span class="code">${esc(o.intended_outcome)}</span>`],["Critérios de busca",c(GATE[o.gate_result]||o.gate_result,o.gate_result)+(o.gate_failed_reason&&o.gate_failed_reason!=="—"?` <span class="code">${esc(o.gate_failed_reason)}</span>`:"")],["Compatível com a W2",`<span class="code">${esc(o.compatibility_verdict)}</span>`],["Status no registro",`<span class="code">${esc(o.status)}</span>`],["Como foi encontrada",esc(o.search_method)]])}</div>
+   ${d.corr.length?`<div class="blk"><span class="lab">Correções sobre a candidatura</span>${d.corr.map(x=>`<p>${esc(x.field)}: <s>${esc(x.old)}</s> → <b>${esc(x.new)}</b> <span class="code">${esc(x.ev)}</span></p>`).join("")}<p class="fine" style="margin-top:6px">O registro original é congelado; as correções são eventos e a interface mostra o valor corrigido.</p></div>`:""}
+   ${o.notes||(a&&a.notes)?`<div class="blk"><span class="lab">Notas internas</span>${o.notes?`<p class="lab" style="text-transform:none;letter-spacing:0;margin-bottom:4px">Oportunidade</p><div class="prose x">${clamp(o.notes,300)}</div>`:""}${a&&a.notes?`<p class="lab" style="text-transform:none;letter-spacing:0;margin:12px 0 4px">Candidatura</p><div class="prose x">${clamp(a.notes,300)}</div>`:""}</div>`:""}
+   ${aud.length?`<div class="blk"><span class="lab">Eventos de auditoria · ${aud.length}</span><div class="evl">${aud.map(evBlock).join("")}</div></div>`:""}`;
 }
 
 /* ---------- Métricas ---------- */
 function viewMetrics(){
-  document.title="Métricas · Busca de vagas";
-  const mature=IDX.filter(r=>r.app&&days(r.ds)>=21);
+  head(`Busca de vagas / <b>Métricas</b>`,"Métricas");
+  const apps=IDX.filter(applied),mature=apps.filter(r=>days(r.ds)>=21);
   const adv=r=>["screening","test","interview","offer","hired"].includes(r.st)||r.niv>0;
-  const funnel=rows=>[["Vagas vistas",rows.length],["Passaram nos critérios",rows.filter(r=>r.gate==="PASS").length],["Candidaturas",rows.filter(r=>r.app).length],["Com resposta",rows.filter(r=>r.fr).length],["Avançaram",rows.filter(adv).length],["Entrevistas",rows.filter(r=>r.niv).length]];
-  const bars=rows=>{const f=funnel(rows),mx=Math.max(1,f[0][1]);return f.map(([l,n])=>`<div class="bar"><span>${l}</span><span class="tk"><i style="width:${n/mx*100}%"></i></span><b>${n}</b></div>`).join("");};
-  const tracks=[...new Set(IDX.map(r=>r.tr))];
-  const srcs=[...new Set(IDX.map(r=>r.src))];
+  const tracks=[...new Set(IDX.map(r=>r.tr))],srcs=[...new Set(IDX.map(r=>r.src))];
   const rd=IDX.filter(r=>r.fr&&r.ds).map(r=>days(r.ds)-days(r.fr)).sort((a,b)=>a-b);
-  view.innerHTML=`<div class="vh"><div><h1>Métricas</h1><div class="sub">${mature.length} candidatura(s) madura(s) (21+ dias). ${mature.length<10?"Taxas só aparecem a partir de 10 maduras: por enquanto, dados insuficientes.":""}</div></div></div>
-  <div class="grid2"><section class="card"><h2>Funil geral</h2>${bars(IDX)}</section>
-  <section class="card"><h2>Fontes</h2>${srcs.map(s=>{const rows=IDX.filter(r=>r.src===s);return `<div class="li"><div class="w"><div class="t">${esc(SRC[s]||s)}</div><div class="m">${rows.length} vaga(s) · ${rows.filter(r=>r.app).length} candidatura(s) · ${rows.filter(r=>r.fr).length} resposta(s)</div></div></div>`;}).join("")}<p class="fine" style="margin-top:8px">Abaixo de 10 candidaturas por fonte, nenhuma fonte é ranqueada.</p></section>
-  ${tracks.map(t=>`<section class="card"><h2>${esc(TRACK[t]||t)}</h2>${bars(IDX.filter(r=>r.tr===t))}</section>`).join("")}
-  <section class="card"><h2>Tempo até a primeira resposta</h2><p class="sub">${rd.length?`Mediana de ${rd[Math.floor(rd.length/2)]} dia(s), em ${rd.length} resposta(s).`:"Nenhuma resposta ainda."}</p></section></div>`;
+  const fun=rows=>{const ap=rows.filter(applied).length;return [["Vagas avaliadas",rows.length,rows.length],["Passaram nos critérios",rows.filter(r=>r.gate==="PASS").length,rows.length],["Candidaturas",ap,rows.length],["Com resposta",rows.filter(r=>r.fr).length,ap],["Avançaram",rows.filter(adv).length,ap],["Entrevistas",rows.filter(r=>r.niv).length,ap]];};
+  const bars=rows=>`<div class="bars">${fun(rows).map(([l,n,of],i)=>`<div><div class="bar-t"><span>${l}</span><span>${i===0?n:`${n} de ${of}`}</span></div><div class="track"><i style="width:${of?n/of*100:0}%"></i></div></div>`).join("")}</div>`;
+  view.innerHTML=`<div class="mgrid">
+   <section class="card pad"><h2>Funil geral</h2><div class="sub" style="margin-bottom:16px">${mature.length} candidatura(s) com 21+ dias${mature.length<10?" · taxas a partir de 10: por enquanto, dados insuficientes":""}</div>${bars(IDX)}</section>
+   <div class="stack"><section class="card pad"><h2>Tempo até a primeira resposta</h2><p style="margin-top:12px"><span style="font-size:24px;font-weight:700">${rd.length?rd[Math.floor(rd.length/2)]:"—"}</span> <span class="sub">${rd.length?`dia(s), mediana de ${rd.length} resposta(s)`:"nenhuma resposta ainda"}</span></p></section>
+   <section class="card"><div class="ch"><div><h2>Fontes</h2><div class="sub">Onde você encontrou cada vaga</div></div></div><table class="t"><thead><tr><th>Fonte</th><th class="n">Vagas</th><th class="n">Cand.</th><th class="n">Resp.</th></tr></thead><tbody>${srcs.map(s=>{const rows=IDX.filter(r=>r.src===s);return `<tr><td>${esc(SRC[s]||s)}</td><td class="n">${rows.length}</td><td class="n">${rows.filter(applied).length}</td><td class="n">${rows.filter(r=>r.fr).length}</td></tr>`;}).join("")}</tbody></table><p class="note pad" style="margin:0;padding-top:12px">Uma fonte só ganha taxa de resposta a partir de 10 candidaturas.</p></section></div>
+   <section class="card" style="grid-column:1/-1"><div class="ch"><div><h2>Por trilha</h2></div></div><div style="overflow-x:auto"><table class="t"><thead><tr><th>Trilha</th><th class="n">Avaliadas</th><th class="n">Passaram</th><th class="n">Candidaturas</th><th class="n">Respostas</th><th class="n">Entrevistas</th></tr></thead><tbody>${tracks.map(t=>{const rows=IDX.filter(r=>r.tr===t);return `<tr><td>${esc(TRACK[t]||t)}</td><td class="n">${rows.length}</td><td class="n">${rows.filter(r=>r.gate==="PASS").length}</td><td class="n">${rows.filter(applied).length}</td><td class="n">${rows.filter(r=>r.fr).length}</td><td class="n">${rows.filter(r=>r.niv).length}</td></tr>`;}).join("")}</tbody></table></div></section>
+  </div>`;
 }
 
-/* ---------- Registro (auditoria do sistema) ---------- */
-function viewAudit(){
-  document.title="Registro · Busca de vagas";
-  const sys=J("sys")||[];
-  view.innerHTML=`<div class="vh"><div><h1>Registro</h1><div class="sub">Eventos do sistema: mudanças de regra, correções e manutenção. ${META.nev} eventos no total; os de cada vaga ficam na aba Registro da própria vaga.</div></div></div>
-  <div class="controls"><label class="search">${icon("i-search")}<input id="aq" type="search" placeholder="Filtrar eventos do sistema" aria-label="Filtrar"></label></div><div class="card audit" id="al"></div>`;
-  const draw=q=>{const t=fold(q);$("#al").innerHTML=sys.slice().reverse().filter(e=>!t||fold(e.summary+" "+e.event_id+" "+e.entity_id+" "+e.detail_verbatim).includes(t)).map(e=>`<div class="row"><span class="id">${esc(e.event_id)} · ${esc(e.timestamp)} · ${esc(e.entity_id)}</span> <b>${esc(EVT[e.event_type]||e.event_type)}</b><div>${linkify(e.summary)}</div>${det_("Detalhes",[e.detail_verbatim&&`<div class="v">${linkify(e.detail_verbatim)}</div>`,(e.old_value||e.new_value)&&`<p class="fine">antes: ${esc(e.old_value)}</p><p class="fine">depois: ${esc(e.new_value)}</p>`].filter(Boolean).join(""))}</div>`).join("")||'<p class="empty">Nada encontrado.</p>';};
-  $("#aq").addEventListener("input",e=>draw(e.target.value));draw("");
+/* ---------- Histórico do sistema ---------- */
+function viewSystem(){
+  head(`Manutenção / <b>Histórico do sistema</b>`,"Histórico do sistema");
+  const sys=(J("sys")||[]).slice().reverse();
+  const areas=[...new Set(sys.map(e=>e.entity_id))];
+  view.innerHTML=`<section class="card"><div class="ch"><div><h2>Mudanças nas regras e no sistema</h2><div class="sub">Critérios, contexto profissional, materiais e estrutura dos dados. O que aconteceu em cada vaga fica no histórico da própria vaga.</div></div></div>
+   <div class="filters"><span class="chips" id="ac"><button class="chip on" data-a="">Tudo<span class="c">${sys.length}</span></button>${areas.map(x=>`<button class="chip" data-a="${esc(x)}">${esc(AREA[x]||x)}<span class="c">${sys.filter(e=>e.entity_id===x).length}</span></button>`).join("")}</span></div>
+   <div id="al"></div></section>`;
+  let area="";
+  const draw=()=>{const t=fold(gq.value);let day="";const rows=sys.filter(e=>(!area||e.entity_id===area)&&(!t||fold(e.summary+" "+e.detail_verbatim).includes(t)));
+    $("#al").innerHTML=rows.map(e=>{const d=e.timestamp.slice(0,10);const h=d!==day?`<div class="day">${fd(d)}</div>`:"";day=d;
+      return h+`<div class="sysi"><div class="evh"><span class="pill ${e.event_type==="CORRECTION"?"warn":""}">${esc(EVT[e.event_type]||e.event_type)}</span><span class="tag" style="margin:0">${esc(AREA[e.entity_id]||e.entity_id)}</span><span class="code">${esc(e.event_id)}</span></div><div class="x">${clamp(e.summary,260)}</div>
+        ${e.detail_verbatim||e.old_value||e.new_value?more("detalhes e texto original",(e.detail_verbatim?`<div style="white-space:pre-wrap">${linkify(e.detail_verbatim)}</div>`:"")+ba(e)):""}</div>`;}).join("")||`<div class="none">Nada encontrado.</div>`;};
+  $("#ac").addEventListener("click",e=>{const b=e.target.closest(".chip");if(!b)return;area=b.dataset.a;$("#ac").querySelectorAll(".chip").forEach(x=>x.classList.toggle("on",x===b));draw();});
+  window._sysDraw=draw;draw();
 }
 route();
 </script>
