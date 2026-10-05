@@ -606,7 +606,7 @@ function renderRows(P){
 function whereFound(o){
   if(o.source==="COMPANY-SITE"){const pl=(META.plats||[]).find(p=>p.name===o.source_detail);
     if(pl&&pl.type==="COMPANY-SITE")return "Página de vagas da empresa";
-    return o.source_detail?`Descoberta via ${o.source_detail}, na página de vagas da empresa`:"Página de vagas da empresa";}
+    return o.source_detail?`Página de vagas da empresa · a empresa foi encontrada no ${o.source_detail}`:"Página de vagas da empresa";}
   return `${SRC[o.source]||o.source}${o.source_detail?" · "+o.source_detail:""}`;
 }
 const sibBox=d=>(d.sib&&d.sib.length)?`<div class="state plan" style="margin-bottom:14px"><span class="ico">${icon("i-send")}</span><div><b>Mesmo envio para ${d.sib.length+1} vagas</b><p class="sub" style="margin-top:2px">Você se candidatou a esta vaga e também a ${d.sib.map(x=>`<a href="#/vaga/${x.id}">${esc(x.role)}</a>`).join(", ")} da mesma empresa, em um único formulário.</p></div></div>`:"";
