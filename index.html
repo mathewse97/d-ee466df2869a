@@ -152,6 +152,13 @@ details.fold>div{padding:0 16px 14px}
 .rows .r{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 14px;align-items:center;padding:12px 24px;border-top:1px solid var(--line-2);text-decoration:none;color:inherit}
 .rows .r:hover{background:var(--surface-2)}
 .rows .r:last-child{border-radius:0 0 var(--r) var(--r)}
+.stgs{padding:0 24px 22px;display:grid;gap:14px}
+.stg{border:1px solid var(--line-2);border-radius:14px;overflow:hidden;background:var(--surface)}
+.stgh{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 16px;background:var(--surface-2)}
+.stgh .n{font-size:12.5px;color:var(--muted)}
+.stg .rows .r{padding:12px 16px}
+.stg .rows .r:first-child{border-top:0}
+.stg .rows .r:last-child{border-radius:0}
 .rows .r .rt{text-align:right;font-size:12.5px;color:var(--muted);white-space:nowrap}
 .rows .r .rt .pill{margin-bottom:3px}
 .mini .r{padding:10px 24px}
@@ -517,7 +524,7 @@ function viewToday(){
   const ivs=IDX.filter(r=>r.iv&&r.iv.dt).sort((a,b)=>a.iv.dt<b.iv.dt?-1:1);
   const recent=IDX.filter(r=>r.lr&&days(r.lr)<=30).sort((a,b)=>a.lr<b.lr?1:-1);
   const RANK={offer:0,interview:1,test:2,screening:3,ack:4,waiting:5},rk=r=>RANK[r.st]!==undefined?RANK[r.st]:6;
-  const byLast=active.slice().sort((a,b)=>rk(a)-rk(b)||(rk(a)<=3?(days(a.li)||0)-(days(b.li)||0):(days(b.li)||0)-(days(a.li)||0)));
+  const stageGroups=[...new Set(active.map(r=>r.st))].sort((x,y)=>rk({st:x})-rk({st:y})).map(st=>({st,rows:active.filter(r=>r.st===st).sort((a,b)=>(b.li||"")<(a.li||"")?-1:(b.li||"")>(a.li||"")?1:0)}));
   const toapply=IDX.filter(r=>r.st==="toapply");
   const wk=apps.filter(r=>days(r.ds)<=7).length;
   const kpi=(cls,ic,n,l,h,href)=>`<a class="kpi ${cls}" href="${href}"><span class="ico">${icon(ic)}</span><div><div class="n">${n}</div><div class="l">${l}</div></div>${h?`<span class="h">${h}</span>`:""}</a>`;
@@ -530,8 +537,8 @@ function viewToday(){
     ${kpi("","i-msg",replied.length,"Com resposta","","#/vagas?v=replied")}
     ${kpi("","i-cal",IDX.filter(r=>r.niv).length,"Entrevistas","","#/vagas?v=interview")}</div>
   <div class="dash">
-    <section class="card"><div class="ch"><div><h2>Em andamento</h2><div class="sub"><b>${active.length}</b> candidatura(s) ativas · etapas mais avançadas primeiro</div></div><a class="link" href="#/vagas?v=active">Ver todas</a></div>
-      <div class="rows">${byLast.length?byLast.map(r=>{const n=days(r.li);return `<a class="r" href="#/vaga/${r.id}">${coCell(r)}<div class="rt">${pill(r.st)}<div>${n>=21?`<span class="late">sem retorno ${ago(n)}</span>`:esc(lastTxt(r))}</div></div></a>`;}).join(""):`<p class="empty pad">Nenhuma candidatura em andamento.</p>`}</div>
+    <section class="card"><div class="ch"><div><h2>Em andamento</h2><div class="sub"><b>${active.length}</b> candidatura(s) ativas · uma caixa por etapa · mais recentes primeiro</div></div><a class="link" href="#/vagas?v=active">Ver todas</a></div>
+      ${stageGroups.length?`<div class="stgs">${stageGroups.map(g=>`<div class="stg"><div class="stgh">${pill(g.st)}<span class="n">${g.rows.length} ${g.rows.length===1?"vaga":"vagas"}</span></div><div class="rows">${g.rows.map(r=>{const n=days(r.li);return `<a class="r" href="#/vaga/${r.id}">${coCell(r)}<div class="rt"><div>${n>=21?`<span class="late">sem retorno ${ago(n)}</span>`:esc(lastTxt(r))}</div></div></a>`;}).join("")}</div></div>`).join("")}</div>`:`<p class="empty pad">Nenhuma candidatura em andamento.</p>`}
       ${toapply.length?`<div class="ch" style="border-top:1px solid var(--line-2)"><div><h2 style="font-size:14px">Decidi aplicar, ainda não enviei</h2></div></div><div class="rows mini">${toapply.map(r=>`<a class="r" href="#/vaga/${r.id}">${coCell(r)}<div class="rt">${fds(r.dd)}</div></a>`).join("")}</div>`:""}
     </section>
     <div class="stack">
